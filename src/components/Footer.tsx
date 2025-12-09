@@ -10,7 +10,7 @@ const navLinks = [
 
 const Footer = () => {
   return (
-    <footer className="relative min-h-[500px] overflow-hidden">
+    <footer className="relative min-h-[420px] overflow-hidden flex items-end">
       {/* Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -18,10 +18,10 @@ const Footer = () => {
       />
       
       {/* Glassmorphism Container */}
-      <div className="relative z-10 py-16 px-6">
+      <div className="relative z-10 pb-8 pt-6 px-6 w-full">
         <div className="container mx-auto">
-          <div className="backdrop-blur-xl bg-white/20 border border-white/30 rounded-3xl p-10 shadow-2xl">
-            <div className="grid md:grid-cols-4 gap-12 mb-12">
+          <div className="backdrop-blur-md bg-white/15 border border-white/25 rounded-2xl p-6 shadow-xl">
+            <div className="grid md:grid-cols-4 gap-8 mb-6">
               {/* Logo & Description */}
               <div className="md:col-span-2">
                 <span className="text-3xl font-display font-bold mb-4 block text-foreground">
@@ -70,7 +70,7 @@ const Footer = () => {
             </div>
 
             {/* Divider */}
-            <div className="border-t border-foreground/20 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="border-t border-foreground/20 pt-4 flex flex-col md:flex-row justify-between items-center gap-4">
               <p className="text-foreground/60 text-sm">
                 © 2024 Crisp Cleaning. All rights reserved.
               </p>
