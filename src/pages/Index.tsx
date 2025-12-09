@@ -6,6 +6,8 @@ import Reviews from "@/components/Reviews";
 import FAQs from "@/components/FAQs";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import ParallaxBubbles from "@/components/ParallaxBubbles";
+import ScrollContainer from "@/components/ScrollContainer";
 import { Helmet } from "react-helmet";
 
 const Index = () => {
@@ -19,17 +21,20 @@ const Index = () => {
         />
       </Helmet>
       
-      <div className="min-h-screen bg-background">
-        <Navbar />
-        <main>
-          <Hero />
-          <Services />
-          <About />
-          <Reviews />
-          <FAQs />
-          <Contact />
-        </main>
-        <Footer />
+      <div className="min-h-screen bg-background relative overflow-x-hidden">
+        <ParallaxBubbles />
+        <ScrollContainer>
+          <Navbar />
+          <main>
+            <Hero />
+            <Services />
+            <About />
+            <Reviews />
+            <FAQs />
+            <Contact />
+          </main>
+          <Footer />
+        </ScrollContainer>
       </div>
     </>
   );
