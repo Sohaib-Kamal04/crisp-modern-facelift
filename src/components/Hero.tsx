@@ -14,7 +14,7 @@ const Hero = () => {
           className="w-full h-full object-cover"
         >
           {/* Replace 'your-video.mp4' with your actual video path in the public folder */}
-          <source src="/your-video.mp4" type="video/mp4" />
+          <source src="/hero.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
         
