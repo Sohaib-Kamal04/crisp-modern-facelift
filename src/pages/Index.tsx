@@ -22,7 +22,7 @@ const Index = () => {
         />
       </Helmet>
       
-      <div className="min-h-screen bg-background relative">
+      <div className="min-h-screen bg-background">
         <ParallaxBubbles />
         <ScrollContainer>
           <Navbar />
