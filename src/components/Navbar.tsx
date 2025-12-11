@@ -22,6 +22,9 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const textColorClass = isScrolled ? "text-foreground/70" : "text-white/90";
+  const hoverColorClass = isScrolled ? "hover:text-primary" : "hover:text-white";
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
@@ -31,11 +34,12 @@ const Navbar = () => {
       }`}
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
-        {/* Logo */}
         <a href="#" className="flex items-center gap-2">
-          <span className="text-2xl font-display font-bold text-gradient">
-            crisp.
-          </span>
+\          <img 
+            src="/logo.png" 
+            alt="Crisp Logo" 
+            className="h-8 w-auto object-contain" 
+          />
         </a>
 
         {/* Desktop Navigation */}
@@ -44,8 +48,10 @@ const Navbar = () => {
             <a
               key={link.name}
               href={link.href}
-              className={`text-sm font-medium transition-colors duration-300 hover:text-primary ${
-                link.name === "Home" ? "text-primary" : "text-foreground/70"
+              className={`text-sm font-medium transition-colors duration-300 ${hoverColorClass} ${
+                link.name === "Home" && isScrolled 
+                  ? "text-primary" 
+                  : textColorClass
               }`}
             >
               {link.name}
@@ -55,7 +61,11 @@ const Navbar = () => {
 
         {/* Desktop CTA */}
         <div className="hidden md:flex items-center gap-4">
-          <Button variant="ghost" size="sm">
+          <Button 
+            variant="ghost" 
+            size="sm"
+            className={isScrolled ? "" : "text-white hover:bg-white/20 hover:text-white"}
+          >
             Login
           </Button>
           <Button variant="hero" size="default">
@@ -65,7 +75,7 @@ const Navbar = () => {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden p-2 text-foreground"
+          className={`md:hidden p-2 transition-colors ${isScrolled ? "text-foreground" : "text-white"}`}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
