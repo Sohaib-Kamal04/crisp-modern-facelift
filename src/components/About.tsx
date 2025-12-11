@@ -1,7 +1,48 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
 
 const About = () => {
+  const [yearsCount, setYearsCount] = useState(0);
+  const counterRef = useRef(null);
+  
+  // CONFIGURATION: Set your start year here
+  const startYear = 2015;
+  
+  // Calculate total years dynamically
+  const currentYear = new Date().getFullYear();
+  const totalYears = currentYear - startYear;
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          // Start animation when element is visible
+          let start = 0;
+          const end = totalYears;
+          const duration = 2000; // 2 seconds animation
+          const incrementTime = Math.abs(Math.floor(duration / end));
+
+          const timer = setInterval(() => {
+            start += 1;
+            setYearsCount(start);
+            if (start === end) clearInterval(timer);
+          }, incrementTime);
+
+          // Stop observing after animation starts
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.5 } // Trigger when 50% visible
+    );
+
+    if (counterRef.current) {
+      observer.observe(counterRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [totalYears]);
+
   return (
     <section id="about" className="py-24 bg-secondary/30">
       <div className="container mx-auto px-6">
@@ -34,10 +75,16 @@ const About = () => {
           {/* Visual Element */}
           <div className="relative">
             <div className="relative z-10">
-              <div className="aspect-square rounded-3xl bg-gradient-to-br from-primary/20 via-primary/10 to-transparent p-8 flex items-center justify-center">
+              <div 
+                ref={counterRef}
+                className="aspect-square rounded-3xl bg-gradient-to-br from-primary/20 via-primary/10 to-transparent p-8 flex items-center justify-center"
+              >
                 <div className="text-center">
-                  <div className="text-7xl font-display font-bold text-gradient mb-4">10+</div>
+                  <div className="text-7xl font-display font-bold text-gradient mb-4 tabular-nums">
+                    {yearsCount}+
+                  </div>
                   <p className="text-muted-foreground text-lg">Years of Excellence</p>
+                  <p className="text-xs text-muted-foreground/60 mt-2">Since {startYear}</p>
                 </div>
               </div>
             </div>
