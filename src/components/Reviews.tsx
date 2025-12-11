@@ -50,10 +50,7 @@ const Reviews = () => {
           </p>
         </div>
 
-        {/* Container Layout:
-          - Mobile: Flex Column + Gap (Vertical Stack)
-          - Desktop (md+): Flex Row + No Gap (Horizontal Fan)
-        */}
+        {/* Container Layout */}
         <div className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-0 pt-10 pb-10">
           {testimonials.map((testimonial, index) => {
             // Calculate rotation for Desktop only
@@ -70,8 +67,6 @@ const Reviews = () => {
             return (
               <div
                 key={index}
-                // CSS Variable to hold the rotation value (used in className)
-                style={{ '--desktop-rotation': `${rotation}deg` }}
                 className={`
                   relative 
                   w-full max-w-sm md:w-64 
@@ -84,10 +79,12 @@ const Reviews = () => {
                   /* Desktop: Apply Rotation var, Negative Margin for overlap */
                   md:[transform:rotate(var(--desktop-rotation))]
                   md:ml-[-40px] md:first:ml-0
+                  
+                  /* Desktop Hover State: Reset rotation, lift up, and FORCE Z-INDEX */
                   md:hover:![transform:rotate(0deg)_translateY(-20px)]
-                  md:hover:z-30
+                  md:hover:!z-50
                 `}
-                // Inline z-index to ensure proper stacking order
+                // Inline styles for base stacking order and rotation variable
                 style={{
                     zIndex: index + 1,
                     '--desktop-rotation': `${rotation}deg`
