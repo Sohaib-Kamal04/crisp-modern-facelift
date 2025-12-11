@@ -28,20 +28,22 @@ const HowWeWork = () => {
 
       const rect = sectionRef.current.getBoundingClientRect();
       const sectionTop = rect.top;
-      const sectionHeight = sectionRef.current.offsetHeight;
+      const sectionHeight = rect.height;
       const windowHeight = window.innerHeight;
       
-      // The scrollable distance within this section
+      // Calculate how much we've scrolled into the section
+      // The section is 300vh tall, and the sticky content is 100vh
+      // So we have 200vh of "scroll space" to animate through
       const scrollableDistance = sectionHeight - windowHeight;
       
       if (sectionTop >= 0) {
-        // Haven't reached the section yet
+        // Haven't entered the section yet
         setProgress(0);
-      } else if (sectionTop <= -scrollableDistance) {
-        // Passed the section
+      } else if (Math.abs(sectionTop) >= scrollableDistance) {
+        // Past the section
         setProgress(1);
       } else {
-        // Currently scrolling through the section
+        // Currently in the section - calculate progress
         const currentProgress = Math.abs(sectionTop) / scrollableDistance;
         setProgress(Math.min(1, Math.max(0, currentProgress)));
       }
@@ -62,10 +64,10 @@ const HowWeWork = () => {
     <section 
       ref={sectionRef} 
       className="relative bg-foreground"
-      style={{ height: "250vh" }}
+      style={{ height: "300vh" }}
     >
-      {/* Sticky container that stays in view */}
-      <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
+      {/* Sticky container - this stays fixed while scrolling through the section */}
+      <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
         <div className="container mx-auto px-6">
           {/* Section Header */}
           <h2 className="text-3xl md:text-5xl font-display font-bold text-center mb-20 text-background">
@@ -99,7 +101,7 @@ const HowWeWork = () => {
                 style={{
                   strokeDasharray: pathLength,
                   strokeDashoffset: pathLength - (progress * pathLength),
-                  transition: "stroke-dashoffset 0.05s linear",
+                  transition: "stroke-dashoffset 0.1s ease-out",
                 }}
               />
             </svg>
@@ -121,12 +123,12 @@ const HowWeWork = () => {
                 return (
                   <div
                     key={index}
-                    className="absolute w-64 text-center transition-all duration-700 ease-out"
+                    className="absolute w-64 text-center transition-all duration-500 ease-out"
                     style={{
                       left: positions[index].left,
                       top: positions[index].top,
                       opacity: isActive ? 1 : 0.2,
-                      transform: isFullyActive ? "translateY(0) scale(1)" : "translateY(30px) scale(0.95)",
+                      transform: isFullyActive ? "translateY(0) scale(1)" : "translateY(20px) scale(0.95)",
                     }}
                   >
                     <span className="inline-block text-primary text-sm font-medium mb-3 tracking-wider">
@@ -148,7 +150,7 @@ const HowWeWork = () => {
           <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
             <div className="w-24 h-1 bg-background/20 rounded-full overflow-hidden">
               <div 
-                className="h-full bg-primary rounded-full transition-all duration-100"
+                className="h-full bg-primary rounded-full transition-all duration-150"
                 style={{ width: `${progress * 100}%` }}
               />
             </div>
