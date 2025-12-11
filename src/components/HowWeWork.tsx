@@ -25,9 +25,8 @@ const HowWeWork = () => {
   const [pathLength, setPathLength] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
 
-  // 1. Check Screen Size (Mobile vs Desktop)
+  // 1. Check Screen Size
   useEffect(() => {
-    // We consider 'Desktop' behavior starting at md (768px)
     const checkDesktop = () => setIsDesktop(window.innerWidth >= 768);
     checkDesktop(); 
     window.addEventListener("resize", checkDesktop);
@@ -70,32 +69,23 @@ const HowWeWork = () => {
       className="relative bg-foreground text-background"
       style={{ height: isDesktop ? "300vh" : "auto" }}
     >
-      {/* STICKY WRAPPER 
-         - Uses flex-col to manage vertical space.
-         - 'h-screen' ensures it fills the viewport.
-         - 'max-h-screen' prevents overflow on short screens.
+      {/* FIXED LINE BELOW:
+         Changed 'md:py-8' to 'md:pt-28 md:pb-8'.
+         md:pt-28 adds ~112px of padding to the top. 
+         This clears the Fixed Navbar so the Header is fully visible.
       */}
       <div className={`
         w-full px-6 py-20
-        md:sticky md:top-0 md:h-screen md:max-h-screen md:flex md:flex-col md:items-center md:py-8 md:overflow-hidden
+        md:sticky md:top-0 md:h-screen md:max-h-screen md:flex md:flex-col md:items-center md:pt-28 md:pb-8 md:overflow-hidden
       `}>
         
-        {/* HEADER: No bottom margin on desktop to let flex gap handle spacing */}
         <h2 className="text-3xl md:text-5xl font-display font-bold text-center mb-16 md:mb-0 md:shrink-0 text-background z-20">
           The Way We Work
         </h2>
 
-        {/* VISUALIZATION AREA
-           - flex-1: Takes up remaining vertical space after the header.
-           - w-full: Takes full width.
-           - min-h-0: Crucial flexbox property that allows this container to shrink if the screen is short.
-        */}
+        {/* VISUALIZATION AREA */}
         <div className="relative w-full max-w-6xl mx-auto md:flex-1 md:min-h-0 md:flex md:items-center md:justify-center">
           
-          {/* ASPECT RATIO WRAPPER 
-             - We create a container that maintains the aspect ratio of the SVG.
-             - On short screens (@media max-height), we scale it down to fit.
-          */}
           <div className="md:relative md:w-full md:aspect-[1000/700] md:max-h-full">
             
             {/* SVG Wavy Line */}
@@ -132,16 +122,10 @@ const HowWeWork = () => {
                 const thresholds = [0.1, 0.5, 0.9];
                 const isActive = isDesktop ? progress >= thresholds[index] : true;
                 
-                /* RESPONSIVE POSITIONS
-                   - Instead of px or left %, we use specific alignment.
-                   - Card 1: Left aligned.
-                   - Card 2: Center aligned (bottom).
-                   - Card 3: Right aligned (top) -> This fixes the overflow on 1024px screens.
-                */
                 const desktopPositions = [
-                  { left: "2%", top: "0%" },                 // Top Left
-                  { left: "50%", top: "auto", bottom: "5%", x: "-50%" }, // Bottom Center
-                  { left: "auto", right: "2%", top: "0%" },  // Top Right
+                  { left: "2%", top: "0%" },
+                  { left: "50%", top: "auto", bottom: "5%", x: "-50%" },
+                  { left: "auto", right: "2%", top: "0%" },
                 ];
 
                 const pos = desktopPositions[index];
@@ -151,7 +135,6 @@ const HowWeWork = () => {
                   right: pos.right,
                   top: pos.top,
                   bottom: pos.bottom,
-                  // Combine dynamic translate with the centering X translate if needed
                   transform: `translate(${pos.x || '0'}, ${isActive ? '0' : '40px'}) scale(${isActive ? 1 : 0.9})`,
                   opacity: isActive ? 1 : 0.2,
                   filter: isActive ? "blur(0px)" : "blur(2px)",
@@ -163,17 +146,10 @@ const HowWeWork = () => {
                     className={`
                       transition-all duration-700 ease-out
                       relative w-full max-w-md mx-auto
-                      
-                      /* DESKTOP SIZING 
-                         - md:w-60 (Smaller for tablets/small laptops)
-                         - lg:w-72 (Larger for big monitors)
-                         This ensures it fits on 1024px screens without overlap
-                      */
                       md:absolute md:w-60 lg:w-72 md:m-0
                     `}
                     style={desktopStyle}
                   >
-                    {/* Mobile Line Connector */}
                     <div className="md:hidden absolute left-4 top-16 bottom-[-3rem] w-0.5 bg-primary/20 last:hidden" />
 
                     <div className="bg-background/5 backdrop-blur-sm p-5 rounded-xl border border-white/10 relative z-10">
