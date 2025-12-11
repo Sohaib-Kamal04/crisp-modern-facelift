@@ -19,27 +19,30 @@ const steps = [
 ];
 
 const HowWeWork = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (!containerRef.current) return;
+      if (!sectionRef.current) return;
 
-      const rect = containerRef.current.getBoundingClientRect();
-      const containerHeight = containerRef.current.offsetHeight;
-      const viewportHeight = window.innerHeight;
+      const rect = sectionRef.current.getBoundingClientRect();
+      const sectionTop = rect.top;
+      const sectionHeight = sectionRef.current.offsetHeight;
+      const windowHeight = window.innerHeight;
       
-      // Calculate scroll progress through the container
-      const scrollStart = rect.top;
-      const scrollRange = containerHeight - viewportHeight;
+      // The scrollable distance within this section
+      const scrollableDistance = sectionHeight - windowHeight;
       
-      if (scrollStart > 0) {
+      if (sectionTop >= 0) {
+        // Haven't reached the section yet
         setProgress(0);
-      } else if (scrollStart < -scrollRange) {
+      } else if (sectionTop <= -scrollableDistance) {
+        // Passed the section
         setProgress(1);
       } else {
-        const currentProgress = Math.abs(scrollStart) / scrollRange;
+        // Currently scrolling through the section
+        const currentProgress = Math.abs(sectionTop) / scrollableDistance;
         setProgress(Math.min(1, Math.max(0, currentProgress)));
       }
     };
@@ -50,22 +53,27 @@ const HowWeWork = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // SVG path for the wavy line connecting all three steps
-  const wavyPath = "M 100 50 Q 50 150 100 250 Q 150 350 100 450 Q 50 550 150 650 L 350 650 Q 450 650 500 550 Q 550 450 500 350 Q 450 250 550 150 L 750 150 Q 850 150 900 250 Q 950 350 900 450 Q 850 550 900 650";
+  // SVG path for the wavy line
+  const wavyPath = "M 50 80 C 50 200, 150 300, 150 400 C 150 500, 50 550, 150 650 L 500 650 C 600 650, 650 550, 650 450 C 650 350, 550 300, 550 200 C 550 100, 650 80, 750 80 L 950 80";
   
-  const pathLength = 2200; // Approximate path length
+  const pathLength = 2500;
 
   return (
-    <section ref={containerRef} className="relative h-[300vh] bg-foreground">
-      <div className="sticky top-0 h-screen flex items-center overflow-hidden">
+    <section 
+      ref={sectionRef} 
+      className="relative bg-foreground"
+      style={{ height: "250vh" }}
+    >
+      {/* Sticky container that stays in view */}
+      <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
         <div className="container mx-auto px-6">
           {/* Section Header */}
-          <h2 className="text-3xl md:text-5xl font-display font-bold text-center mb-16 text-background">
+          <h2 className="text-3xl md:text-5xl font-display font-bold text-center mb-20 text-background">
             The Way We Work
           </h2>
 
           {/* Steps Container */}
-          <div className="relative max-w-5xl mx-auto">
+          <div className="relative max-w-5xl mx-auto h-[400px]">
             {/* SVG Wavy Line */}
             <svg
               className="absolute inset-0 w-full h-full pointer-events-none"
@@ -76,10 +84,10 @@ const HowWeWork = () => {
               {/* Background dashed line */}
               <path
                 d={wavyPath}
-                stroke="hsl(var(--primary) / 0.2)"
+                stroke="hsl(var(--primary) / 0.15)"
                 strokeWidth="3"
                 fill="none"
-                strokeDasharray="10 10"
+                strokeDasharray="8 8"
               />
               {/* Animated solid line */}
               <path
@@ -87,37 +95,47 @@ const HowWeWork = () => {
                 stroke="hsl(var(--primary))"
                 strokeWidth="3"
                 fill="none"
-                strokeDasharray={pathLength}
-                strokeDashoffset={pathLength - progress * pathLength}
-                style={{ transition: "stroke-dashoffset 0.1s ease-out" }}
+                strokeLinecap="round"
+                style={{
+                  strokeDasharray: pathLength,
+                  strokeDashoffset: pathLength - (progress * pathLength),
+                  transition: "stroke-dashoffset 0.05s linear",
+                }}
               />
             </svg>
 
-            {/* Steps */}
-            <div className="relative grid md:grid-cols-3 gap-8 py-12">
+            {/* Steps positioned along the path */}
+            <div className="absolute inset-0">
               {steps.map((step, index) => {
-                const stepProgress = progress * 3;
-                const isActive = stepProgress >= index;
-                const isFullyActive = stepProgress >= index + 0.5;
+                const stepThreshold = index / steps.length;
+                const isActive = progress >= stepThreshold;
+                const isFullyActive = progress >= stepThreshold + 0.15;
+                
+                // Position each step
+                const positions = [
+                  { left: "5%", top: "10%" },
+                  { left: "35%", top: "70%" },
+                  { left: "70%", top: "5%" },
+                ];
                 
                 return (
                   <div
                     key={index}
-                    className={`text-center transition-all duration-500 ${
-                      index === 1 ? "md:mt-32" : "md:mt-0"
-                    }`}
+                    className="absolute w-64 text-center transition-all duration-700 ease-out"
                     style={{
-                      opacity: isActive ? 1 : 0.3,
-                      transform: isFullyActive ? "translateY(0)" : "translateY(20px)",
+                      left: positions[index].left,
+                      top: positions[index].top,
+                      opacity: isActive ? 1 : 0.2,
+                      transform: isFullyActive ? "translateY(0) scale(1)" : "translateY(30px) scale(0.95)",
                     }}
                   >
-                    <span className="inline-block text-primary text-sm font-medium mb-4">
+                    <span className="inline-block text-primary text-sm font-medium mb-3 tracking-wider">
                       [ STEP {step.number} ]
                     </span>
-                    <h3 className="text-xl md:text-2xl font-display font-bold mb-4 text-background">
+                    <h3 className="text-xl md:text-2xl font-display font-bold mb-3 text-background">
                       {step.title}
                     </h3>
-                    <p className="text-background/60 text-sm md:text-base leading-relaxed max-w-xs mx-auto">
+                    <p className="text-background/50 text-sm leading-relaxed">
                       {step.description}
                     </p>
                   </div>
@@ -126,17 +144,17 @@ const HowWeWork = () => {
             </div>
           </div>
 
-          {/* Scroll indicator */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-            <span className="text-background/40 text-xs uppercase tracking-wider">
-              {progress < 1 ? "Scroll to explore" : "Continue"}
-            </span>
-            <div className="w-6 h-10 border-2 border-background/30 rounded-full flex justify-center pt-2">
+          {/* Progress indicator */}
+          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
+            <div className="w-24 h-1 bg-background/20 rounded-full overflow-hidden">
               <div 
-                className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce"
-                style={{ animationDuration: "1.5s" }}
+                className="h-full bg-primary rounded-full transition-all duration-100"
+                style={{ width: `${progress * 100}%` }}
               />
             </div>
+            <span className="text-background/40 text-xs uppercase tracking-wider">
+              {progress < 1 ? "Scroll to continue" : ""}
+            </span>
           </div>
         </div>
       </div>
