@@ -62,8 +62,13 @@ const Hero = () => {
               Get a Free Quote
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-            {/* Added styling to outline button to make it visible on dark video */}
-            <Button variant="hero-outline" size="xl" className="text-white border-white hover:bg-white/20">
+  
+          {/* UPDATE: Changed to Primary Color (Orange) */}
+            <Button 
+              variant="hero-outline" 
+              size="xl" 
+              className="text-primary border-primary hover:bg-primary/20 hover:text-white transition-colors duration-300"
+            >    
               Learn More
             </Button>
           </div>
