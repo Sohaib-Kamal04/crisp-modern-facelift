@@ -23,7 +23,7 @@ const Navbar = () => {
   }, []);
 
   const textColorClass = isScrolled ? "text-foreground/70" : "text-white/90";
-  const hoverColorClass = isScrolled ? "hover:text-primary" : "hover:text-white";
+  const hoverColorClass = "hover:text-primary";
 
   return (
     <header
