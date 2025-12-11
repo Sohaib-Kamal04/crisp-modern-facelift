@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { cn } from "@/lib/utils"; // Assuming you have a cn utility, if not, standard template literals work
 
 const steps = [
   {
@@ -28,22 +27,23 @@ const HowWeWork = () => {
 
   // 1. Check Screen Size (Mobile vs Desktop)
   useEffect(() => {
+    // We consider 'Desktop' behavior starting at md (768px)
     const checkDesktop = () => setIsDesktop(window.innerWidth >= 768);
-    checkDesktop(); // Initial check
+    checkDesktop(); 
     window.addEventListener("resize", checkDesktop);
     return () => window.removeEventListener("resize", checkDesktop);
   }, []);
 
-  // 2. Calculate SVG length (Desktop only)
+  // 2. Calculate SVG length
   useEffect(() => {
     if (isDesktop && pathRef.current) {
       setPathLength(pathRef.current.getTotalLength());
     }
   }, [isDesktop]);
 
-  // 3. Handle Scroll (Desktop only)
+  // 3. Handle Scroll
   useEffect(() => {
-    if (!isDesktop) return; // Skip scroll logic on mobile
+    if (!isDesktop) return;
 
     const handleScroll = () => {
       if (!containerRef.current) return;
@@ -68,26 +68,37 @@ const HowWeWork = () => {
     <section 
       ref={containerRef} 
       className="relative bg-foreground text-background"
-      // Mobile: Auto height | Desktop: 300vh for scroll space
       style={{ height: isDesktop ? "300vh" : "auto" }}
     >
-      {/* CONTAINER WRAPPER 
-        Mobile: Padding & Block layout
-        Desktop: Sticky & Flex layout
+      {/* STICKY WRAPPER 
+         - Uses flex-col to manage vertical space.
+         - 'h-screen' ensures it fills the viewport.
+         - 'max-h-screen' prevents overflow on short screens.
       */}
       <div className={`
         w-full px-6 py-20
-        md:sticky md:top-0 md:h-screen md:flex md:items-center md:justify-center md:overflow-hidden md:py-0
+        md:sticky md:top-0 md:h-screen md:max-h-screen md:flex md:flex-col md:items-center md:py-8 md:overflow-hidden
       `}>
-        <div className="container mx-auto">
-          <h2 className="text-3xl md:text-5xl font-display font-bold text-center mb-16 md:mb-20 text-background">
-            The Way We Work
-          </h2>
+        
+        {/* HEADER: No bottom margin on desktop to let flex gap handle spacing */}
+        <h2 className="text-3xl md:text-5xl font-display font-bold text-center mb-16 md:mb-0 md:shrink-0 text-background z-20">
+          The Way We Work
+        </h2>
 
-          {/* Visualization Area */}
-          <div className="relative max-w-5xl mx-auto md:h-[500px]">
+        {/* VISUALIZATION AREA
+           - flex-1: Takes up remaining vertical space after the header.
+           - w-full: Takes full width.
+           - min-h-0: Crucial flexbox property that allows this container to shrink if the screen is short.
+        */}
+        <div className="relative w-full max-w-6xl mx-auto md:flex-1 md:min-h-0 md:flex md:items-center md:justify-center">
+          
+          {/* ASPECT RATIO WRAPPER 
+             - We create a container that maintains the aspect ratio of the SVG.
+             - On short screens (@media max-height), we scale it down to fit.
+          */}
+          <div className="md:relative md:w-full md:aspect-[1000/700] md:max-h-full">
             
-            {/* SVG Wavy Line - HIDDEN ON MOBILE */}
+            {/* SVG Wavy Line */}
             <svg
               className="hidden md:block absolute inset-0 w-full h-full pointer-events-none"
               viewBox="0 0 1000 700"
@@ -116,30 +127,33 @@ const HowWeWork = () => {
             </svg>
 
             {/* Steps Container */}
-            <div className={`
-              /* Mobile: Flex Column Layout */
-              flex flex-col gap-12
-              
-              /* Desktop: Absolute Full Layout */
-              md:block md:absolute md:inset-0
-            `}>
+            <div className="flex flex-col gap-12 md:block md:absolute md:inset-0">
               {steps.map((step, index) => {
-                // Desktop Positioning Logic
                 const thresholds = [0.1, 0.5, 0.9];
                 const isActive = isDesktop ? progress >= thresholds[index] : true;
                 
+                /* RESPONSIVE POSITIONS
+                   - Instead of px or left %, we use specific alignment.
+                   - Card 1: Left aligned.
+                   - Card 2: Center aligned (bottom).
+                   - Card 3: Right aligned (top) -> This fixes the overflow on 1024px screens.
+                */
                 const desktopPositions = [
-                  { left: "5%", top: "10%" },
-                  { left: "45%", top: "60%" },
-                  { left: "75%", top: "5%" },
+                  { left: "2%", top: "0%" },                 // Top Left
+                  { left: "50%", top: "auto", bottom: "5%", x: "-50%" }, // Bottom Center
+                  { left: "auto", right: "2%", top: "0%" },  // Top Right
                 ];
 
-                // Dynamic Style Object (Only applied on Desktop)
+                const pos = desktopPositions[index];
+
                 const desktopStyle = isDesktop ? {
-                  left: desktopPositions[index].left,
-                  top: desktopPositions[index].top,
+                  left: pos.left,
+                  right: pos.right,
+                  top: pos.top,
+                  bottom: pos.bottom,
+                  // Combine dynamic translate with the centering X translate if needed
+                  transform: `translate(${pos.x || '0'}, ${isActive ? '0' : '40px'}) scale(${isActive ? 1 : 0.9})`,
                   opacity: isActive ? 1 : 0.2,
-                  transform: isActive ? "translateY(0) scale(1)" : "translateY(40px) scale(0.9)",
                   filter: isActive ? "blur(0px)" : "blur(2px)",
                 } : {};
 
@@ -147,25 +161,26 @@ const HowWeWork = () => {
                   <div
                     key={index}
                     className={`
-                      /* Common transitions */
                       transition-all duration-700 ease-out
-                      
-                      /* Mobile Styles: Relative, Centered, Lines connecting items */
                       relative w-full max-w-md mx-auto
                       
-                      /* Desktop Styles: Absolute, Fixed width */
-                      md:absolute md:w-72 md:m-0
+                      /* DESKTOP SIZING 
+                         - md:w-60 (Smaller for tablets/small laptops)
+                         - lg:w-72 (Larger for big monitors)
+                         This ensures it fits on 1024px screens without overlap
+                      */
+                      md:absolute md:w-60 lg:w-72 md:m-0
                     `}
                     style={desktopStyle}
                   >
-                    {/* Mobile Only: Vertical Line Connector */}
+                    {/* Mobile Line Connector */}
                     <div className="md:hidden absolute left-4 top-16 bottom-[-3rem] w-0.5 bg-primary/20 last:hidden" />
 
-                    <div className="bg-background/5 backdrop-blur-sm p-6 rounded-xl border border-white/10 relative z-10">
-                      <span className="inline-block text-primary text-xs font-bold mb-3 px-2 py-1 bg-primary/10 rounded">
+                    <div className="bg-background/5 backdrop-blur-sm p-5 rounded-xl border border-white/10 relative z-10">
+                      <span className="inline-block text-primary text-xs font-bold mb-2 px-2 py-1 bg-primary/10 rounded">
                         STEP {step.number}
                       </span>
-                      <h3 className="text-xl font-display font-bold mb-3 text-background">
+                      <h3 className="text-lg md:text-xl font-display font-bold mb-2 text-background">
                         {step.title}
                       </h3>
                       <p className="text-background/60 text-sm leading-relaxed">
