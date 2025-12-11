@@ -19,63 +19,68 @@ const steps = [
 ];
 
 const HowWeWork = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const pathRef = useRef<SVGPathElement>(null);
   const [progress, setProgress] = useState(0);
+  const [pathLength, setPathLength] = useState(0);
 
+  // 1. Calculate the exact length of the SVG path on mount
+  useEffect(() => {
+    if (pathRef.current) {
+      setPathLength(pathRef.current.getTotalLength());
+    }
+  }, []);
+
+  // 2. Handle Scroll
   useEffect(() => {
     const handleScroll = () => {
-      if (!sectionRef.current) return;
+      if (!containerRef.current) return;
 
-      const rect = sectionRef.current.getBoundingClientRect();
-      const sectionTop = rect.top;
-      const sectionHeight = rect.height;
+      const rect = containerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
       
-      // Calculate how much we've scrolled into the section
-      // The section is 300vh tall, and the sticky content is 100vh
-      // So we have 200vh of "scroll space" to animate through
-      const scrollableDistance = sectionHeight - windowHeight;
+      // The element is sticky for the duration of: Container Height - Window Height
+      const scrollDist = rect.height - windowHeight;
       
-      if (sectionTop >= 0) {
-        // Haven't entered the section yet
+      // Calculate how far we have scrolled past the top of the container
+      // Rect.top is positive when entering, negative when scrolling through
+      const scrolled = -rect.top; 
+
+      if (scrolled < 0) {
         setProgress(0);
-      } else if (Math.abs(sectionTop) >= scrollableDistance) {
-        // Past the section
+      } else if (scrolled > scrollDist) {
         setProgress(1);
       } else {
-        // Currently in the section - calculate progress
-        const currentProgress = Math.abs(sectionTop) / scrollableDistance;
-        setProgress(Math.min(1, Math.max(0, currentProgress)));
+        setProgress(scrolled / scrollDist);
       }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+    // Trigger once on mount to set initial state
     handleScroll();
     
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [pathLength]); // Recalculate if path length changes (unlikely but safe)
 
   // SVG path for the wavy line
   const wavyPath = "M 50 80 C 50 200, 150 300, 150 400 C 150 500, 50 550, 150 650 L 500 650 C 600 650, 650 550, 650 450 C 650 350, 550 300, 550 200 C 550 100, 650 80, 750 80 L 950 80";
-  
-  const pathLength = 2500;
 
   return (
     <section 
-      ref={sectionRef} 
+      ref={containerRef} 
       className="relative bg-foreground"
+      // 300vh means: 1 screen to view, 2 screens of scrolling duration
       style={{ height: "300vh" }}
     >
-      {/* Sticky container - this stays fixed while scrolling through the section */}
+      {/* Sticky container */}
       <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
         <div className="container mx-auto px-6">
-          {/* Section Header */}
-          <h2 className="text-3xl md:text-5xl font-display font-bold text-center mb-20 text-background">
+          <h2 className="text-3xl md:text-5xl font-display font-bold text-center mb-12 md:mb-20 text-background">
             The Way We Work
           </h2>
 
-          {/* Steps Container */}
-          <div className="relative max-w-5xl mx-auto h-[400px]">
+          {/* Visualization Container */}
+          <div className="relative max-w-5xl mx-auto h-[400px] md:h-[500px]">
             {/* SVG Wavy Line */}
             <svg
               className="absolute inset-0 w-full h-full pointer-events-none"
@@ -83,80 +88,74 @@ const HowWeWork = () => {
               fill="none"
               preserveAspectRatio="xMidYMid meet"
             >
-              {/* Background dashed line */}
+              {/* Ghost Path (Background) */}
               <path
                 d={wavyPath}
                 stroke="hsl(var(--primary) / 0.15)"
-                strokeWidth="3"
+                strokeWidth="4"
                 fill="none"
                 strokeDasharray="8 8"
               />
-              {/* Animated solid line */}
+              
+              {/* Animated Path (Foreground) */}
               <path
+                ref={pathRef}
                 d={wavyPath}
                 stroke="hsl(var(--primary))"
-                strokeWidth="3"
+                strokeWidth="4"
                 fill="none"
                 strokeLinecap="round"
                 style={{
                   strokeDasharray: pathLength,
-                  strokeDashoffset: pathLength - (progress * pathLength),
-                  transition: "stroke-dashoffset 0.1s ease-out",
+                  // If pathLength is 0 (initial render), hide the line
+                  strokeDashoffset: pathLength === 0 ? 0 : pathLength - (progress * pathLength),
+                  // Removing transition creates a 1:1 feel with scroll. 
+                  // Add it back if you want it 'smooth' but laggy.
                 }}
               />
             </svg>
 
-            {/* Steps positioned along the path */}
+            {/* Steps Nodes */}
             <div className="absolute inset-0">
               {steps.map((step, index) => {
-                const stepThreshold = index / steps.length;
-                const isActive = progress >= stepThreshold;
-                const isFullyActive = progress >= stepThreshold + 0.15;
+                // Adjust thresholds to match where the curves actually are in the SVG
+                const thresholds = [0.1, 0.5, 0.9];
+                const isActive = progress >= thresholds[index];
                 
-                // Position each step
+                // CSS positions matching the SVG curve points approximately
                 const positions = [
-                  { left: "5%", top: "10%" },
-                  { left: "35%", top: "70%" },
-                  { left: "70%", top: "5%" },
+                  { left: "5%", top: "10%" },   // Start
+                  { left: "45%", top: "60%" },  // Middle Dip
+                  { left: "75%", top: "5%" },   // End High
                 ];
                 
                 return (
                   <div
                     key={index}
-                    className="absolute w-64 text-center transition-all duration-500 ease-out"
+                    className="absolute w-64 md:w-72 transition-all duration-700 ease-out"
                     style={{
                       left: positions[index].left,
                       top: positions[index].top,
                       opacity: isActive ? 1 : 0.2,
-                      transform: isFullyActive ? "translateY(0) scale(1)" : "translateY(20px) scale(0.95)",
+                      transform: isActive ? "translateY(0) scale(1)" : "translateY(40px) scale(0.9)",
+                      filter: isActive ? "blur(0px)" : "blur(2px)",
                     }}
                   >
-                    <span className="inline-block text-primary text-sm font-medium mb-3 tracking-wider">
-                      [ STEP {step.number} ]
-                    </span>
-                    <h3 className="text-xl md:text-2xl font-display font-bold mb-3 text-background">
-                      {step.title}
-                    </h3>
-                    <p className="text-background/50 text-sm leading-relaxed">
-                      {step.description}
-                    </p>
+                    <div className="bg-background/5 backdrop-blur-sm p-4 rounded-xl border border-white/10">
+                      <span className="inline-block text-primary text-xs font-bold mb-2 px-2 py-1 bg-primary/10 rounded">
+                        STEP {step.number}
+                      </span>
+                      <h3 className="text-xl font-display font-bold mb-2 text-background">
+                        {step.title}
+                      </h3>
+                      <p className="text-background/60 text-sm leading-relaxed">
+                        {step.description}
+                      </p>
+                    </div>
                   </div>
                 );
               })}
             </div>
-          </div>
-
-          {/* Progress indicator */}
-          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
-            <div className="w-24 h-1 bg-background/20 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-primary rounded-full transition-all duration-150"
-                style={{ width: `${progress * 100}%` }}
-              />
-            </div>
-            <span className="text-background/40 text-xs uppercase tracking-wider">
-              {progress < 1 ? "Scroll to continue" : ""}
-            </span>
           </div>
         </div>
       </div>
