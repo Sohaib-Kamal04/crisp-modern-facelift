@@ -35,7 +35,7 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
         <a href="#" className="flex items-center gap-2">
-\          <img 
+          <img 
             src="/logo.png" 
             alt="Crisp Logo" 
             className="h-8 w-auto object-contain" 
