@@ -75,7 +75,7 @@ const HowWeWork = () => {
       {/* Sticky container */}
       <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
         <div className="container mx-auto px-6">
-          <h2 className="text-3xl md:text-5xl font-display font-bold text-center mb-12 md:mb-20 text-background">
+          <h2 className="text-3xl md:text-5xl font-display font-bold text-center mb-12 mt-10 md:mb-20 text-background">
             The Way We Work
           </h2>
 
