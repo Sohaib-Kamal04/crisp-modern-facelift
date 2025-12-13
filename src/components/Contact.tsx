@@ -5,12 +5,15 @@ import { ArrowRight, Mail, MapPin, Phone } from "lucide-react";
 
 const Contact = () => {
   return (
-    <section id="contact" className="py-24 bg-background">
-      <div className="container mx-auto px-6">
+    <section id="contact" className="py-24 bg-background relative overflow-hidden">
+      {/* Moved Bubbles to edges */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2" />
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-accent/5 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2" />
+
+      <div className="container mx-auto px-6 relative z-10">
+        
         {/* CTA Banner */}
-        {/* CHANGED: Reduced mobile padding from p-12 to p-8 for better fit */}
-        <div className="relative rounded-3xl bg-gradient-to-br from-primary via-primary/90 to-accent p-8 md:p-16 mb-24 overflow-hidden">
-          {/* Decorative elements */}
+        <div className="relative rounded-3xl bg-gradient-to-br from-primary via-primary/90 to-accent p-8 md:p-16 mb-24 overflow-hidden shadow-2xl">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full blur-2xl" />
           
@@ -49,21 +52,15 @@ const Contact = () => {
             </p>
 
             <div className="space-y-6">
-              
-              {/* EMAIL ITEM - FIXED OVERFLOW */}
               <div className="flex items-start gap-4">
-                {/* Added shrink-0 to prevent icon from squashing */}
                 <div className="w-12 h-12 shrink-0 rounded-xl bg-primary/10 flex items-center justify-center">
                   <Mail className="w-5 h-5 text-primary" />
                 </div>
-                {/* Added min-w-0 to allow text to wrap properly */}
                 <div className="min-w-0">
                   <p className="text-sm text-muted-foreground">Email</p>
-                  {/* Added break-all to handle long email addresses */}
                   <p className="font-medium break-all">crispcleaningmelbourne@outlook.com</p>
                 </div>
               </div>
-
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 shrink-0 rounded-xl bg-primary/10 flex items-center justify-center">
                   <Phone className="w-5 h-5 text-primary" />
@@ -73,7 +70,6 @@ const Contact = () => {
                   <p className="font-medium">+61 (03) 1234 5678</p>
                 </div>
               </div>
-
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 shrink-0 rounded-xl bg-primary/10 flex items-center justify-center">
                   <MapPin className="w-5 h-5 text-primary" />
@@ -87,7 +83,7 @@ const Contact = () => {
           </div>
 
           {/* Contact Form */}
-          <div className="glass-card rounded-3xl p-8 md:p-10">
+          <div className="glass-card rounded-3xl p-8 md:p-10 shadow-lg border border-border/50">
             <form className="space-y-6">
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
