@@ -18,10 +18,10 @@ const Hero = () => {
       
       // Calculate progress based on first 500px of scrolling
       // You can adjust '500' to make the animation faster or slower
-      const progress = Math.min(scrollY / 500, 1);
+      const progress = Math.min(scrollY / 300, 1);
 
       // SCALE: Shrink from 1.0 down to 0.9
-      const newScale = 1 - (progress * 0.1); 
+      const newScale = 1 - (progress * 0.05); 
       
       // RADIUS: Go from 0px to 40px
       const newRadius = progress * 40;
