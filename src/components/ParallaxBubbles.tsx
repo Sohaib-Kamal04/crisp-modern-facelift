@@ -19,37 +19,31 @@ const ParallaxBubbles = () => {
   // Generate bubbles only once
   if (bubblesRef.current.length === 0) {
     bubblesRef.current = Array.from({ length: 15 }, (_, i) => {
-      // Make the first 2 bubbles "Hero" bubbles (Huge)
+      // First 2 bubbles are "Hero" bubbles (Huge)
       const isLarge = i < 2;
 
-      // SIZE: Large ones are 300px-500px, others are 20px-100px
+      // SIZE
       const size = isLarge 
         ? Math.random() * 200 + 300 
         : Math.random() * 80 + 20;
 
-      // LEFT: Range from -10% to 110% to let them hang off screen
-      // If it's large, force it to the far edges (either < 0 or > 80)
+      // LEFT: Push to far edges
       let left;
       if (isLarge) {
+        // Either far left (-15% to -5%) or far right (95% to 105%)
         left = Math.random() > 0.5 ? Math.random() * 10 - 15 : Math.random() * 10 + 95; 
       } else {
-        left = Math.random() * 120 - 10;
+        // Random spread, allowing slight overflow
+        left = Math.random() * 110 - 5;
       }
-
-      // SPEED: Large bubbles move faster (foreground), small move slower (background)
-      // Range: 0.05 (very slow) to 0.8 (fast)
-      const speed = isLarge 
-        ? Math.random() * 0.4 + 0.6  // 0.6 - 1.0 speed
-        : Math.random() * 0.2 + 0.05; // 0.05 - 0.25 speed
 
       return {
         id: i,
         size,
         left,
-        // Spread vertically across 400vh to cover long scrolls
-        top: Math.random() * 400, 
-        speed,
-        // Lower opacity for large bubbles so they don't block text
+        top: Math.random() * 400, // Spread vertically
+        // Speed: Large = Fast (Foreground), Small = Slow (Background)
+        speed: isLarge ? Math.random() * 0.4 + 0.6 : Math.random() * 0.2 + 0.05, 
         opacity: isLarge ? 0.08 : Math.random() * 0.15 + 0.05, 
         isLarge,
       };
@@ -60,13 +54,13 @@ const ParallaxBubbles = () => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
     };
-
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+    // CHANGED: z-0 -> z-50 to ensure they sit ON TOP of your white/grey section backgrounds
+    <div className="fixed inset-0 pointer-events-none overflow-hidden z-50">
       {bubblesRef.current.map((bubble) => (
         <div
           key={bubble.id}
@@ -77,11 +71,10 @@ const ParallaxBubbles = () => {
             left: `${bubble.left}%`,
             top: `${bubble.top}vh`,
             opacity: bubble.opacity,
-            // Blur effect for depth (Large = blurrier)
+            // Blur effect
             filter: bubble.isLarge ? 'blur(80px)' : 'blur(2px)',
-            // The translation moves them upward based on scroll
+            // Parallax movement
             transform: `translate3d(0, ${-scrollY * bubble.speed}px, 0)`,
-            // Removed transition for snappier, direct parallax feel
           }}
         />
       ))}
