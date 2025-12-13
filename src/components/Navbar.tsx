@@ -15,16 +15,34 @@ const navLinks = [
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
+  // New State for Scaling (Matches Hero.jsx)
+  const [scale, setScale] = useState(1);
+  const [radius, setRadius] = useState(0);
 
-  // Define the point where the animation ends (matches the logic in Hero.jsx)
+  // Define the point where the background color animation triggers
   const ANIMATION_END_POINT = 300;
 
   useEffect(() => {
     const handleScroll = () => {
-      // The Navbar stays transparent until the Hero rounding is complete (at 500px)
-      setIsScrolled(window.scrollY > ANIMATION_END_POINT);
+      const scrollY = window.scrollY;
+
+      // 1. Background Logic
+      setIsScrolled(scrollY > ANIMATION_END_POINT);
+
+      // 2. Scaling Logic (Matches Hero.jsx exactly)
+      // Note: Ensure this '200' matches your Hero's scroll divisor
+      const progress = Math.min(scrollY / 200, 1);
+      
+      // Matches the scale factor in your Hero component (0.02 or 0.1 depending on your preference)
+      const newScale = 1 - (progress * 0.02); 
+      const newRadius = progress * 40; // Matches Hero radius
+      
+      setScale(newScale);
+      setRadius(newRadius);
     };
-    window.addEventListener("scroll", handleScroll);
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -34,11 +52,27 @@ const Navbar = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      // Added 'will-change-transform' for performance
+      // Added 'transition-colors' instead of 'transition-all' to prevent fighting with JS scale updates
+      className={`fixed top-0 z-50 transition-colors duration-300 ease-linear ${
         isScrolled
-          ? "bg-card/90 backdrop-blur-lg shadow-sm py-3" // Scrolled State (White/Glass)
-          : "bg-transparent py-6" // Top State (Transparent)
+          ? "bg-card/90 backdrop-blur-lg shadow-sm py-3" 
+          : "bg-transparent py-6"
       }`}
+      style={{
+        // Apply the same transform logic as Hero
+        transform: `scale(${scale})`,
+        // We set margin-left/right auto via 'left-0 right-0' + 'mx-auto' on a container, 
+        // but for a fixed element scaling, we need to ensure it stays centered.
+        // 'top center' keeps it pinned to top while shrinking.
+        transformOrigin: "top center", 
+        // Apply the matching border radius (only noticeable if bg is colored)
+        borderBottomLeftRadius: `${radius}px`,
+        borderBottomRightRadius: `${radius}px`,
+        // Ensure it spans full width before scaling
+        width: "100%",
+        left: 0,
+      }}
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
         
