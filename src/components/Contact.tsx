@@ -8,7 +8,8 @@ const Contact = () => {
     <section id="contact" className="py-24 bg-background">
       <div className="container mx-auto px-6">
         {/* CTA Banner */}
-        <div className="relative rounded-3xl bg-gradient-to-br from-primary via-primary/90 to-accent p-12 md:p-16 mb-24 overflow-hidden">
+        {/* CHANGED: Reduced mobile padding from p-12 to p-8 for better fit */}
+        <div className="relative rounded-3xl bg-gradient-to-br from-primary via-primary/90 to-accent p-8 md:p-16 mb-24 overflow-hidden">
           {/* Decorative elements */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full blur-2xl" />
@@ -48,17 +49,23 @@ const Contact = () => {
             </p>
 
             <div className="space-y-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+              
+              {/* EMAIL ITEM - FIXED OVERFLOW */}
+              <div className="flex items-start gap-4">
+                {/* Added shrink-0 to prevent icon from squashing */}
+                <div className="w-12 h-12 shrink-0 rounded-xl bg-primary/10 flex items-center justify-center">
                   <Mail className="w-5 h-5 text-primary" />
                 </div>
-                <div>
+                {/* Added min-w-0 to allow text to wrap properly */}
+                <div className="min-w-0">
                   <p className="text-sm text-muted-foreground">Email</p>
-                  <p className="font-medium">crispcleaningmelbourne@outlook.com</p>
+                  {/* Added break-all to handle long email addresses */}
+                  <p className="font-medium break-all">crispcleaningmelbourne@outlook.com</p>
                 </div>
               </div>
+
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                <div className="w-12 h-12 shrink-0 rounded-xl bg-primary/10 flex items-center justify-center">
                   <Phone className="w-5 h-5 text-primary" />
                 </div>
                 <div>
@@ -66,8 +73,9 @@ const Contact = () => {
                   <p className="font-medium">+61 (03) 1234 5678</p>
                 </div>
               </div>
+
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                <div className="w-12 h-12 shrink-0 rounded-xl bg-primary/10 flex items-center justify-center">
                   <MapPin className="w-5 h-5 text-primary" />
                 </div>
                 <div>
