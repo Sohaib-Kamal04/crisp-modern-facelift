@@ -55,7 +55,6 @@ const Reviews = () => {
   }, []);
 
   return (
-    // Changed bg to secondary/30 for a soft transition
     <section id="reviews" ref={sectionRef} className="py-24 overflow-hidden">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
@@ -88,7 +87,8 @@ const Reviews = () => {
                 className={`
                   w-full max-w-sm md:w-64
                   md:ml-[-40px] md:first:ml-0
-                  transition-all duration-700 ease-out
+                  /* CHANGED: transition-all to transition-[opacity,transform] for better performance */
+                  transition-[opacity,transform] duration-700 ease-out
                   ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-32'}
                   md:hover:!z-50
                 `}
@@ -101,12 +101,20 @@ const Reviews = () => {
                   className={`
                     relative 
                     bg-background rounded-2xl p-6 shadow-lg 
-                    cursor-pointer transition-all duration-500 ease-out
+                    cursor-pointer 
+                    /* CHANGED: transition-all to transition-transform */
+                    transition-transform duration-300 ease-out
+                    /* ADDED: will-change-transform for GPU Acceleration */
+                    will-change-transform
                     transform-none mb-0
                     md:[transform:rotate(var(--desktop-rotation))]
                     md:hover:![transform:rotate(0deg)_translateY(-20px)]
                   `}
-                  style={{ '--desktop-rotation': `${rotation}deg` } as React.CSSProperties}
+                  // ADDED: backfaceVisibility helps smooth out rotation rendering
+                  style={{ 
+                    '--desktop-rotation': `${rotation}deg`,
+                    backfaceVisibility: 'hidden' 
+                  } as React.CSSProperties}
                 >
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-semibold text-sm shrink-0">
