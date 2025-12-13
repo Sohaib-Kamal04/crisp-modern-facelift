@@ -2,11 +2,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowRight, Mail, MapPin, Phone } from "lucide-react";
+import useScrollScale from "@/hooks/useScrollScale";
 
 const Contact = () => {
-  return (
-    <section id="contact" className="py-24  relative overflow-hidden">
+  const { ref: sectionRef, style: scaleStyle } = useScrollScale({ threshold: 0.1 });
 
+  return (
+    <section 
+      id="contact" 
+      ref={sectionRef as React.RefObject<HTMLElement>}
+      className="py-24 relative overflow-hidden"
+      style={scaleStyle}
+    >
       <div className="container mx-auto px-6 relative z-10">
         
         {/* CTA Banner */}

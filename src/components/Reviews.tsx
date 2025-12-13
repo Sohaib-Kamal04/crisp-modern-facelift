@@ -2,6 +2,7 @@
 
 import { Star } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
+import useScrollScale from "@/hooks/useScrollScale";
 
 const testimonials = [
   {
@@ -38,7 +39,8 @@ const testimonials = [
 
 const Reviews = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef(null);
+  const cardVisibilityRef = useRef(null);
+  const { ref: sectionRef, style: scaleStyle } = useScrollScale({ threshold: 0.1 });
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -50,12 +52,17 @@ const Reviews = () => {
       },
       { threshold: 0.2 } 
     );
-    if (sectionRef.current) observer.observe(sectionRef.current);
+    if (cardVisibilityRef.current) observer.observe(cardVisibilityRef.current);
     return () => observer.disconnect();
   }, []);
 
   return (
-    <section id="reviews" ref={sectionRef} className="py-24 overflow-hidden">
+    <section 
+      id="reviews" 
+      ref={sectionRef as React.RefObject<HTMLElement>}
+      className="py-24 overflow-hidden"
+      style={scaleStyle}
+    >
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <span className="inline-block px-4 py-2 bg-primary/20 text-primary text-sm font-medium rounded-full mb-4">
@@ -69,7 +76,7 @@ const Reviews = () => {
           </p>
         </div>
 
-        <div className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-0 pt-10 pb-10">
+        <div ref={cardVisibilityRef} className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-0 pt-10 pb-10">
           {testimonials.map((testimonial, index) => {
             const isOddCard = index % 2 === 0;
             const getRotation = () => {

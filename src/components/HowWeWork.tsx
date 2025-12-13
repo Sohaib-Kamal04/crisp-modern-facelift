@@ -21,11 +21,13 @@ const steps = [
 ];
 
 const HowWeWork = () => {
-  const containerRef = useRef(null);
-  const pathRef = useRef(null);
+  const containerRef = useRef<HTMLElement>(null);
+  const pathRef = useRef<SVGPathElement>(null);
   const [progress, setProgress] = useState(0);
   const [pathLength, setPathLength] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [sectionVisible, setSectionVisible] = useState(false);
+  const [exitProgress, setExitProgress] = useState(0);
 
   // 1. Check Screen Size
   useEffect(() => {
@@ -42,21 +44,50 @@ const HowWeWork = () => {
     }
   }, [isDesktop]);
 
-  // 3. Handle Scroll
+  // 3. Handle Scroll with entry/exit transitions
   useEffect(() => {
-    if (!isDesktop) return;
+    if (!isDesktop) {
+      setSectionVisible(true);
+      return;
+    }
 
     const handleScroll = () => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
-      // Reduced height multiplier for faster scroll interaction
-      const windowHeight = window.innerHeight * 0.9; 
-      const scrollDist = rect.height - windowHeight;
+      const windowHeight = window.innerHeight;
+      
+      // Entry detection - starts when section enters viewport
+      const entryStart = windowHeight;
+      const entryEnd = windowHeight * 0.3;
+      
+      // Calculate section visibility for scale animation
+      if (rect.top < entryStart && rect.top > entryEnd) {
+        const entryProgress = 1 - (rect.top - entryEnd) / (entryStart - entryEnd);
+        setSectionVisible(entryProgress > 0.3);
+      } else if (rect.top <= entryEnd) {
+        setSectionVisible(true);
+      } else {
+        setSectionVisible(false);
+      }
+
+      // Calculate line animation progress
+      const scrollDist = rect.height - windowHeight * 0.9;
       const scrolled = -rect.top;
 
       if (scrolled < 0) setProgress(0);
       else if (scrolled > scrollDist) setProgress(1);
       else setProgress(scrolled / scrollDist);
+
+      // Calculate exit progress for fade out
+      const exitStart = rect.height - windowHeight * 1.5;
+      const exitEnd = rect.height - windowHeight * 0.5;
+      if (scrolled > exitStart && scrolled < exitEnd) {
+        setExitProgress((scrolled - exitStart) / (exitEnd - exitStart));
+      } else if (scrolled >= exitEnd) {
+        setExitProgress(1);
+      } else {
+        setExitProgress(0);
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -64,10 +95,11 @@ const HowWeWork = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [pathLength, isDesktop]);
 
+  // Calculate dynamic styles for smooth transitions
+  const sectionScale = sectionVisible ? 1 : 0.5;
+  const sectionOpacity = sectionVisible ? (1 - exitProgress * 0.3) : 0;
+
   // UPDATED PATH: The "Red Line" Arch / Ohm Symbol
-  // 1. Start: Bottom Left (50, 600) -> Under Card 1
-  // 2. Peak: Top Center (500, 100) -> Over Card 2
-  // 3. End: Bottom Right (950, 600) -> Under Card 3
   const redLinePath = "M 50 600 C 250 600, 350 100, 500 100 S 750 600, 950 600";
 
   return (
@@ -76,10 +108,17 @@ const HowWeWork = () => {
       className="relative bg-foreground text-background"
       style={{ height: isDesktop ? "180vh" : "auto" }}
     >
-      <div className={`
-        w-full px-6 py-20
-        md:sticky md:top-0 md:h-[90vh] md:max-h-[90vh] md:flex md:flex-col md:items-center md:pt-28 md:pb-8 md:overflow-hidden
-      `}>
+      <div 
+        className={`
+          w-full px-6 py-20
+          md:sticky md:top-0 md:h-[90vh] md:max-h-[90vh] md:flex md:flex-col md:items-center md:pt-28 md:pb-8 md:overflow-hidden
+        `}
+        style={{
+          transform: `scale(${sectionScale})`,
+          opacity: sectionOpacity,
+          transition: "transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
+        }}
+      >
         
         <h2 className="text-3xl md:text-5xl font-display font-bold text-center mb-16 md:mb-0 md:shrink-0 text-background z-20">
           The Way We Work

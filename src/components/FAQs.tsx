@@ -5,6 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import useScrollScale from "@/hooks/useScrollScale";
 
 const faqs = [
   {
@@ -30,8 +31,15 @@ const faqs = [
 ];
 
 const FAQs = () => {
+  const { ref: sectionRef, style: scaleStyle } = useScrollScale({ threshold: 0.1 });
+
   return (
-    <section id="faqs" className="py-24">
+    <section 
+      id="faqs" 
+      ref={sectionRef as React.RefObject<HTMLElement>}
+      className="py-24"
+      style={scaleStyle}
+    >
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
           {/* Left Column - Header */}

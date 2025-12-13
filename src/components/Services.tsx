@@ -5,6 +5,7 @@ import {
   CheckCircle2, MapPin, User, Mail, Phone, CreditCard, Loader2
 } from "lucide-react";
 import { useState, useEffect } from "react";
+import useScrollScale from "@/hooks/useScrollScale";
 
 // --- IMPORTS FROM UTILS ---
 import { 
@@ -483,8 +484,15 @@ const Services = () => {
     </div>
   );
 
+  const { ref: sectionRef, style: scaleStyle } = useScrollScale({ threshold: 0.1 });
+
   return (
-    <section id="services" className="py-24 relative overflow-hidden">
+    <section 
+      id="services" 
+      ref={sectionRef as React.RefObject<HTMLElement>}
+      className="py-24 relative overflow-hidden"
+      style={scaleStyle}
+    >
 
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="bg-white rounded-[3rem] shadow-2xl relative overflow-hidden max-w-6xl mx-auto min-h-[700px] flex flex-col py-12 px-6 md:px-16 transition-all duration-500">
