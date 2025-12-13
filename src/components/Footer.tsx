@@ -51,7 +51,7 @@ const Footer = () => {
 
               {/* 3. Help & Support (Span 3) - ALIGN RIGHT, TEXT LEFT */}
               {/* 'items-center md:items-end' pushes the whole block to the right */}
-              <div className="md:col-span-3 flex flex-col items-center md:items-end">
+              <div className="md:col-span-3 flex flex-col items-center md:items-center">
                 
                 {/* INNER WRAPPER: This holds the content together */}
                 {/* 'items-center md:items-start' ensures the text inside aligns left */}
