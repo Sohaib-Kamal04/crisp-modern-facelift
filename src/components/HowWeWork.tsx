@@ -49,7 +49,8 @@ const HowWeWork = () => {
     const handleScroll = () => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
+      // We calculate based on the reduced height (90vh)
+      const windowHeight = window.innerHeight * 0.9; 
       const scrollDist = rect.height - windowHeight;
       const scrolled = -rect.top;
 
@@ -63,20 +64,23 @@ const HowWeWork = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [pathLength, isDesktop]);
 
-  // UPDATED PATH: A simple rounded "U" curve (Quadratic Bezier)
-  // Starts Top Left (50, 150) -> Dips to Bottom Center (500, 600) -> Ends Top Right (950, 150)
-  const simplePath = "M 50 150 Q 500 600 950 150";
+  // UPDATED PATH: "Ohm/Wave" Style
+  // 1. Start: x=150, y=350 (Under Card 1)
+  // 2. Curve to: x=500, y=80  (Top of Card 2)
+  // 3. Curve to: x=850, y=650 (Bottom of Card 3)
+  const wavePath = "M 150 350 C 300 350, 350 80, 500 80 C 650 80, 700 650, 850 650";
 
   return (
     <section 
       ref={containerRef} 
       className="relative bg-foreground text-background"
-      // UPDATED HEIGHT: Reduced from 300vh to 175vh for a shorter, faster workflow
-      style={{ height: isDesktop ? "175vh" : "auto" }}
+      // HEIGHT: Reduced scroll track to 180vh (fast scroll)
+      style={{ height: isDesktop ? "180vh" : "auto" }}
     >
       <div className={`
         w-full px-6 py-20
-        md:sticky md:top-0 md:h-screen md:max-h-screen md:flex md:flex-col md:items-center md:pt-28 md:pb-8 md:overflow-hidden
+        /* STICKY CONTAINER: Reduced to 90vh (90% viewport) as requested */
+        md:sticky md:top-0 md:h-[90vh] md:max-h-[90vh] md:flex md:flex-col md:items-center md:pt-28 md:pb-8 md:overflow-hidden
       `}>
         
         <h2 className="text-3xl md:text-5xl font-display font-bold text-center mb-16 md:mb-0 md:shrink-0 text-background z-20">
@@ -88,7 +92,7 @@ const HowWeWork = () => {
           
           <div className="md:relative md:w-full md:aspect-[1000/700] md:max-h-full">
             
-            {/* SVG Wavy Line */}
+            {/* SVG Line */}
             <svg
               className="hidden md:block absolute inset-0 w-full h-full pointer-events-none"
               viewBox="0 0 1000 700"
@@ -96,7 +100,7 @@ const HowWeWork = () => {
               preserveAspectRatio="xMidYMid meet"
             >
               <path
-                d={simplePath}
+                d={wavePath}
                 stroke="hsl(var(--primary) / 0.15)"
                 strokeWidth="4"
                 fill="none"
@@ -104,7 +108,7 @@ const HowWeWork = () => {
               />
               <path
                 ref={pathRef}
-                d={simplePath}
+                d={wavePath}
                 stroke="hsl(var(--primary))"
                 strokeWidth="4"
                 fill="none"
@@ -122,10 +126,14 @@ const HowWeWork = () => {
                 const thresholds = [0.1, 0.5, 0.9];
                 const isActive = isDesktop ? progress >= thresholds[index] : true;
                 
+                // NEW POSITIONS to match the "Wave" path
                 const desktopPositions = [
-                  { left: "2%", top: "15%" },  // Adjusted top slightly to match new curve start
-                  { left: "50%", top: "auto", bottom: "15%", x: "-50%" }, // Adjusted bottom for curve dip
-                  { left: "auto", right: "2%", top: "15%" }, // Adjusted top to match new curve end
+                  // Card 1: Top Left (Line starts UNDER it)
+                  { left: "2%", top: "10%" }, 
+                  // Card 2: Top Center (Line hits TOP of it)
+                  { left: "50%", top: "12%", x: "-50%" }, 
+                  // Card 3: Bottom Right (Line hits BOTTOM of it)
+                  { left: "auto", right: "2%", bottom: "10%" }, 
                 ];
 
                 const pos = desktopPositions[index];
