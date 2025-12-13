@@ -106,7 +106,7 @@ const HowWeWork = () => {
   return (
     <section 
       ref={containerRef} 
-      className="relative"
+      className="relative rounded-2xl"
       style={{ 
         height: isDesktop ? "180vh" : "auto",
       }}
