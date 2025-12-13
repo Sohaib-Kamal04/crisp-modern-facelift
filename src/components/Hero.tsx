@@ -81,13 +81,17 @@ const Hero = () => {
                   Get a Free Quote
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
+                
+                {/* --- UPDATED LEARN MORE BUTTON --- */}
                 <Button 
                   variant="hero-outline" 
                   size="xl" 
-                  className="text-white border-white hover:bg-white hover:text-primary transition-all duration-300 shadow-lg"
+                  className="font-bold border-2 border-white bg-transparent text-white hover:bg-white hover:text-primary transition-all duration-300 shadow-lg"
                 >
                   Learn More
                 </Button>
+                {/* --------------------------------- */}
+                
               </div>
               <div 
                 className="mt-16 flex flex-wrap items-center justify-center gap-8 text-white/80 animate-fade-up opacity-0"
