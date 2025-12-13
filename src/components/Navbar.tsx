@@ -18,7 +18,6 @@ const Navbar = () => {
   
   // New State for Scaling (Matches Hero.jsx)
   const [scale, setScale] = useState(1);
-  const [radius, setRadius] = useState(0);
 
   // Define the point where the background color animation triggers
   const ANIMATION_END_POINT = 300;
@@ -36,10 +35,8 @@ const Navbar = () => {
       
       // Matches the scale factor in your Hero component (0.02 or 0.1 depending on your preference)
       const newScale = 1 - (progress * 0.02); 
-      const newRadius = progress * 40; // Matches Hero radius
       
       setScale(newScale);
-      setRadius(newRadius);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -66,15 +63,12 @@ const Navbar = () => {
         // but for a fixed element scaling, we need to ensure it stays centered.
         // 'top center' keeps it pinned to top while shrinking.
         transformOrigin: "top center", 
-        // Apply the matching border radius (only noticeable if bg is colored)
-        borderBottomLeftRadius: `${radius}px`,
-        borderBottomRightRadius: `${radius}px`,
         // Ensure it spans full width before scaling
         width: "100%",
         left: 0,
       }}
     >
-      <div className="container mx-auto px-6 flex items-center justify-between">
+      <div className="container mx-auto px-6 pr-2 flex items-center justify-between">
         
         {/* LOGO */}
         <a href="#" className="flex items-center gap-2">
