@@ -24,7 +24,7 @@ const Footer = () => {
           <div className="backdrop-blur-md bg-white/15 border border-white/25 rounded-3xl p-6 md:p-10 shadow-xl">
             
             {/* UPDATED GRID: changed to grid-cols-6 for better spacing control */}
-            <div className="grid md:grid-cols-6 gap-2 text-center md:text-left">
+            <div className="grid md:grid-cols-6 gap-4 text-center md:text-left">
               
               {/* Logo & Description - Takes 3 cols (50%) */}
               <div className="md:col-span-3 flex flex-col items-center md:items-start">
