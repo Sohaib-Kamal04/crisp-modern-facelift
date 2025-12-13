@@ -45,27 +45,19 @@ const Reviews = () => {
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          observer.disconnect(); // Only animate once
+          observer.disconnect();
         }
       },
-      { threshold: 0.2 } // Trigger when 20% of section is visible
+      { threshold: 0.2 } 
     );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
+    if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
 
   return (
-    <section 
-      id="reviews" 
-      ref={sectionRef} 
-      className="py-24 bg-primary/10 overflow-hidden"
-    >
+    // Changed bg to secondary/30 for a soft transition
+    <section id="reviews" ref={sectionRef} className="py-24 bg-secondary/30 overflow-hidden">
       <div className="container mx-auto px-6">
-        {/* Section Header */}
         <div className="text-center mb-16">
           <span className="inline-block px-4 py-2 bg-primary/20 text-primary text-sm font-medium rounded-full mb-4">
             Testimonials
@@ -78,10 +70,8 @@ const Reviews = () => {
           </p>
         </div>
 
-        {/* Container Layout */}
         <div className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-0 pt-10 pb-10">
           {testimonials.map((testimonial, index) => {
-            // Calculate rotation for Desktop only
             const isOddCard = index % 2 === 0;
             const getRotation = () => {
               if (!isOddCard) return 0;
@@ -93,49 +83,31 @@ const Reviews = () => {
             const rotation = getRotation();
 
             return (
-              // WRAPPER DIV: Handles Layout (Margins) + Entrance Animation
               <div
                 key={index}
                 className={`
-                  /* Base Layout Sizing (Moved from inner card) */
                   w-full max-w-sm md:w-64
-                  /* Negative Margins for Desktop Fan Layout */
                   md:ml-[-40px] md:first:ml-0
-
-                  /* ENTRANCE ANIMATION CLASSES */
                   transition-all duration-700 ease-out
                   ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-32'}
-
-                  /* Desktop Hover State for Z-Index */
                   md:hover:!z-50
                 `}
                 style={{
                   zIndex: index + 1,
-                  transitionDelay: `${index * 150}ms` // Staggered animation (fast)
+                  transitionDelay: `${index * 150}ms`
                 }}
               >
-                {/* INNER CARD: Handles Visuals, Rotation, and Hover Lift */}
                 <div
                   className={`
                     relative 
                     bg-background rounded-2xl p-6 shadow-lg 
                     cursor-pointer transition-all duration-500 ease-out
-                    
-                    /* Mobile: No rotation */
                     transform-none mb-0
-
-                    /* Desktop: Apply Rotation var */
                     md:[transform:rotate(var(--desktop-rotation))]
-                    
-                    /* Desktop Hover State: Reset rotation, lift up */
                     md:hover:![transform:rotate(0deg)_translateY(-20px)]
                   `}
-                  // Rotation variable for the inner card
-                  style={{
-                    '--desktop-rotation': `${rotation}deg`
-                  }}
+                  style={{ '--desktop-rotation': `${rotation}deg` }}
                 >
-                  {/* Avatar and Info */}
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-semibold text-sm shrink-0">
                       {testimonial.avatar}
@@ -149,18 +121,11 @@ const Reviews = () => {
                       </p>
                     </div>
                   </div>
-
-                  {/* Stars */}
                   <div className="flex gap-1 mb-4">
                     {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className="w-4 h-4 fill-primary text-primary"
-                      />
+                      <Star key={i} className="w-4 h-4 fill-primary text-primary" />
                     ))}
                   </div>
-
-                  {/* Content */}
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     "{testimonial.content}"
                   </p>
