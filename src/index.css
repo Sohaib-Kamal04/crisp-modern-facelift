@@ -6,7 +6,7 @@
 @layer base {
   :root {
     /* Warm peachy-orange theme - keeping original Crisp Cleaning colors */
-    --background: 30 50% 98%;
+    --background: 30 50% 98% / 0%;
     --foreground: 25 30% 15%;
 
     --card: 0 0% 100%;
