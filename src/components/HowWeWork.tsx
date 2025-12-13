@@ -49,7 +49,7 @@ const HowWeWork = () => {
     const handleScroll = () => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
-      // We calculate based on the reduced height (90vh)
+      // Reduced height multiplier for faster scroll interaction
       const windowHeight = window.innerHeight * 0.9; 
       const scrollDist = rect.height - windowHeight;
       const scrolled = -rect.top;
@@ -64,20 +64,20 @@ const HowWeWork = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [pathLength, isDesktop]);
 
-  // UPDATED PATH: Large "S" Shape matching the image
-  // Starts bottom-left, curves around top-left card, down around bottom-center card, and up around top-right card.
-  const wavePath = "M 50 600 C 150 600, 150 150, 350 150 C 550 150, 550 600, 750 600 C 950 600, 950 150, 1050 150";
+  // UPDATED PATH: The "Red Line" Arch / Ohm Symbol
+  // 1. Start: Bottom Left (50, 600) -> Under Card 1
+  // 2. Peak: Top Center (500, 100) -> Over Card 2
+  // 3. End: Bottom Right (950, 600) -> Under Card 3
+  const redLinePath = "M 50 600 C 250 600, 350 100, 500 100 S 750 600, 950 600";
 
   return (
     <section 
       ref={containerRef} 
       className="relative bg-foreground text-background"
-      // HEIGHT: Reduced scroll track to 180vh (fast scroll)
       style={{ height: isDesktop ? "180vh" : "auto" }}
     >
       <div className={`
         w-full px-6 py-20
-        /* STICKY CONTAINER: Reduced to 90vh (90% viewport) */
         md:sticky md:top-0 md:h-[90vh] md:max-h-[90vh] md:flex md:flex-col md:items-center md:pt-28 md:pb-8 md:overflow-hidden
       `}>
         
@@ -97,16 +97,18 @@ const HowWeWork = () => {
               fill="none"
               preserveAspectRatio="xMidYMid meet"
             >
+              {/* Ghost Line (Grey Background) */}
               <path
-                d={wavePath}
+                d={redLinePath}
                 stroke="hsl(var(--primary) / 0.15)"
                 strokeWidth="4"
                 fill="none"
                 strokeDasharray="8 8"
               />
+              {/* Animated Line (Primary Color) */}
               <path
                 ref={pathRef}
-                d={wavePath}
+                d={redLinePath}
                 stroke="hsl(var(--primary))"
                 strokeWidth="4"
                 fill="none"
@@ -124,14 +126,14 @@ const HowWeWork = () => {
                 const thresholds = [0.1, 0.5, 0.9];
                 const isActive = isDesktop ? progress >= thresholds[index] : true;
                 
-                // NEW POSITIONS to match the "S" path: Top - Bottom - Top
+                // POSITIONS:
+                // Card 1: Top Left
+                // Card 2: Bottom Center
+                // Card 3: Top Right
                 const desktopPositions = [
-                  // Card 1: Top Left
-                  { left: "5%", top: "10%" }, 
-                  // Card 2: Bottom Center
-                  { left: "50%", bottom: "10%", x: "-50%" }, 
-                  // Card 3: Top Right
-                  { left: "auto", right: "5%", top: "10%" }, 
+                  { left: "2%", top: "5%" }, 
+                  { left: "50%", bottom: "5%", x: "-50%" }, 
+                  { left: "auto", right: "2%", top: "5%" }, 
                 ];
 
                 const pos = desktopPositions[index];
@@ -160,7 +162,7 @@ const HowWeWork = () => {
 
                     <div className="bg-background/5 backdrop-blur-sm p-5 rounded-xl border border-white/10 relative z-10">
                       <span className="inline-block text-primary text-xs font-bold mb-2 px-2 py-1 bg-primary/10 rounded">
-                        [ STEP {step.number} ]
+                        STEP {step.number}
                       </span>
                       <h3 className="text-lg md:text-xl font-display font-bold mb-2 text-background">
                         {step.title}
