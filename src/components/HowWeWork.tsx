@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useRef, useState } from "react";
 
 const steps = [
@@ -61,19 +63,17 @@ const HowWeWork = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [pathLength, isDesktop]);
 
-  const wavyPath = "M 50 80 C 50 200, 150 300, 150 400 C 150 500, 50 550, 150 650 L 500 650 C 600 650, 650 550, 650 450 C 650 350, 550 300, 550 200 C 550 100, 650 80, 750 80 L 950 80";
+  // UPDATED PATH: A simple rounded "U" curve (Quadratic Bezier)
+  // Starts Top Left (50, 150) -> Dips to Bottom Center (500, 600) -> Ends Top Right (950, 150)
+  const simplePath = "M 50 150 Q 500 600 950 150";
 
   return (
     <section 
       ref={containerRef} 
       className="relative bg-foreground text-background"
-      style={{ height: isDesktop ? "300vh" : "auto" }}
+      // UPDATED HEIGHT: Reduced from 300vh to 175vh for a shorter, faster workflow
+      style={{ height: isDesktop ? "175vh" : "auto" }}
     >
-      {/* FIXED LINE BELOW:
-         Changed 'md:py-8' to 'md:pt-28 md:pb-8'.
-         md:pt-28 adds ~112px of padding to the top. 
-         This clears the Fixed Navbar so the Header is fully visible.
-      */}
       <div className={`
         w-full px-6 py-20
         md:sticky md:top-0 md:h-screen md:max-h-screen md:flex md:flex-col md:items-center md:pt-28 md:pb-8 md:overflow-hidden
@@ -96,7 +96,7 @@ const HowWeWork = () => {
               preserveAspectRatio="xMidYMid meet"
             >
               <path
-                d={wavyPath}
+                d={simplePath}
                 stroke="hsl(var(--primary) / 0.15)"
                 strokeWidth="4"
                 fill="none"
@@ -104,7 +104,7 @@ const HowWeWork = () => {
               />
               <path
                 ref={pathRef}
-                d={wavyPath}
+                d={simplePath}
                 stroke="hsl(var(--primary))"
                 strokeWidth="4"
                 fill="none"
@@ -123,9 +123,9 @@ const HowWeWork = () => {
                 const isActive = isDesktop ? progress >= thresholds[index] : true;
                 
                 const desktopPositions = [
-                  { left: "2%", top: "0%" },
-                  { left: "50%", top: "auto", bottom: "5%", x: "-50%" },
-                  { left: "auto", right: "2%", top: "0%" },
+                  { left: "2%", top: "15%" },  // Adjusted top slightly to match new curve start
+                  { left: "50%", top: "auto", bottom: "15%", x: "-50%" }, // Adjusted bottom for curve dip
+                  { left: "auto", right: "2%", top: "15%" }, // Adjusted top to match new curve end
                 ];
 
                 const pos = desktopPositions[index];
