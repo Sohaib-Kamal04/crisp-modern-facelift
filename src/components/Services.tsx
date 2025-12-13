@@ -303,25 +303,26 @@ const Services = () => {
   );
 
   // STEP 5
+  // STEP 5: Summary
   const renderStep5 = () => (
     <div className="max-w-5xl mx-auto animate-in fade-in slide-in-from-right duration-500">
       <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-start">
         
-        {/* Sign Up Form */}
+        {/* Contact Form (Left Side) */}
         <div className="space-y-4 order-2 md:order-1">
           <h3 className="text-2xl font-display font-bold mb-6">Contact Details</h3>
           <div className="grid grid-cols-2 gap-4">
              <InputField icon={User} label="First Name" placeholder="John" 
-               value={formData.contact.firstName} onChange={(v) => setFormData(p => ({...p, contact: {...p.contact, firstName: v}}))} />
+               value={formData.contact.firstName} onChange={(v: string) => setFormData(p => ({...p, contact: {...p.contact, firstName: v}}))} />
              <InputField icon={User} label="Last Name" placeholder="Doe" 
-               value={formData.contact.lastName} onChange={(v) => setFormData(p => ({...p, contact: {...p.contact, lastName: v}}))} />
+               value={formData.contact.lastName} onChange={(v: string) => setFormData(p => ({...p, contact: {...p.contact, lastName: v}}))} />
           </div>
           
           <InputField icon={Mail} label="Email Address" placeholder="john@example.com" type="email"
-             value={formData.contact.email} onChange={(v) => setFormData(p => ({...p, contact: {...p.contact, email: v}}))} />
+             value={formData.contact.email} onChange={(v: string) => setFormData(p => ({...p, contact: {...p.contact, email: v}}))} />
           
           <InputField icon={Phone} label="Phone Number" placeholder="+61 ..." type="tel"
-             value={formData.contact.phone} onChange={(v) => setFormData(p => ({...p, contact: {...p.contact, phone: v}}))} />
+             value={formData.contact.phone} onChange={(v: string) => setFormData(p => ({...p, contact: {...p.contact, phone: v}}))} />
 
           <div className="space-y-2">
             <label className="text-xs font-semibold text-gray-500 uppercase">Service Address</label>
@@ -351,7 +352,7 @@ const Services = () => {
           </button>
         </div>
 
-        {/* Summary Card */}
+        {/* Summary Card (Right Side) */}
         <div className="bg-gray-900 text-white rounded-3xl p-8 shadow-2xl order-1 md:order-2 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2" />
           
@@ -370,12 +371,34 @@ const Services = () => {
 
             <div className="py-2">
               <span className="block mb-2 text-xs uppercase tracking-wider text-gray-500">Breakdown</span>
-              {Object.entries(formData.homeDetails).map(([key, val]) => val > 0 && (
-                <div key={key} className="flex justify-between mb-1">
-                  <span className="capitalize">{val}x {key}</span>
-                  <span>${HOME_DETAIL_PRICES[key as keyof typeof HOME_DETAIL_PRICES] * val}</span>
+              
+              {/* MANUAL LISTING to avoid Key Mismatch Crash */}
+              {(formData.homeDetails.bedrooms || 0) > 0 && (
+                <div className="flex justify-between mb-1">
+                  <span>{formData.homeDetails.bedrooms}x Bedroom</span>
+                  <span>${HOME_DETAIL_PRICES.Bedroom * (formData.homeDetails.bedrooms || 0)}</span>
                 </div>
-              ))}
+              )}
+              {(formData.homeDetails.bathrooms || 0) > 0 && (
+                <div className="flex justify-between mb-1">
+                  <span>{formData.homeDetails.bathrooms}x Bathroom</span>
+                  <span>${HOME_DETAIL_PRICES.Bathroom * (formData.homeDetails.bathrooms || 0)}</span>
+                </div>
+              )}
+              {(formData.homeDetails.kitchens || 0) > 0 && (
+                <div className="flex justify-between mb-1">
+                  <span>{formData.homeDetails.kitchens}x Kitchen</span>
+                  <span>${HOME_DETAIL_PRICES.Kitchen * (formData.homeDetails.kitchens || 0)}</span>
+                </div>
+              )}
+              {(formData.homeDetails.other || 0) > 0 && (
+                <div className="flex justify-between mb-1">
+                  <span>{formData.homeDetails.other}x Other Area</span>
+                  <span>${HOME_DETAIL_PRICES.Other * (formData.homeDetails.other || 0)}</span>
+                </div>
+              )}
+
+              {/* Extras */}
               {pricingResult?.breakdown.extras.items.map(e => (
                  <div key={e.name} className="flex justify-between mb-1">
                    <span>+ {e.name}</span>
@@ -393,7 +416,10 @@ const Services = () => {
               )}
               <div className="flex justify-between items-end">
                 <span className="text-lg">Total Estimate</span>
-                <span className="text-3xl font-display font-bold text-primary">${pricingResult?.total.toFixed(2)}</span>
+                {/* Fallback to 0 if pricingResult is null to prevent crash */}
+                <span className="text-3xl font-display font-bold text-primary">
+                  ${(pricingResult?.total || 0).toFixed(2)}
+                </span>
               </div>
               <p className="text-[10px] text-gray-500 mt-2 text-right">*Final price may vary upon inspection</p>
             </div>
