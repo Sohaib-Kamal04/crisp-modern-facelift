@@ -24,7 +24,7 @@ const Footer = () => {
           <div className="backdrop-blur-md bg-white/15 border border-white/25 rounded-3xl p-6 md:p-10 shadow-xl">
             
             {/* Grid Layout: Stacked on mobile, 4 columns on desktop */}
-            <div className="grid md:grid-cols-4 gap-8 md:gap-12 mb-8 text-center md:text-left">
+            <div className="grid md:grid-cols-4 gap-5 md:gap-10 mb-8 text-center md:text-left">
               
               {/* Logo & Description */}
               <div className="md:col-span-2 flex flex-col items-center md:items-start">
