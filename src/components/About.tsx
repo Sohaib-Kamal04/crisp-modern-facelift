@@ -44,7 +44,7 @@ const About = () => {
   }, [totalYears]);
 
   return (
-    <section id="about" className="py-24 bg-secondary/30">
+    <section id="about" className="py-24 ">
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Content */}
