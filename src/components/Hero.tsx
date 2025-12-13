@@ -36,7 +36,7 @@ const Hero = () => {
 
   return (
     // 1. SCROLL TRACK: Taller than screen (150vh) to allow scrolling time for animation
-    <div ref={containerRef} className="relative h-[150vh] bg-background">
+    <div ref={containerRef} className="relative h-[150vh] bg-white">
       
       {/* 2. STICKY WRAPPER: Stays pinned to the viewport while shrinking */}
       <div className="sticky top-0 h-screen overflow-hidden flex items-center justify-center">
