@@ -25,8 +25,8 @@ import { getCurrentAddress } from "@/utils/geolocation"; // Adjust path as neede
 
 // --- LOCAL COMPONENT HELPERS ---
 const servicesList = [
-  { id: "residential", icon: Home, title: "Residential", description: "Perfect for houses and apartments." },
-  { id: "commercial", icon: Building2, title: "Commercial", description: "Offices, schools, and businesses." },
+  { id: "residential", icon: Home, title: "Residential", description: "Bring a breath of fresh air and elevate your living spaces with our residential cleaning services, designed to bring comfort and hygiene to your home" },
+  { id: "commercial", icon: Building2, title: "Commercial", description: "Our commercial cleaning services are tailored to meet the unique demands of offices, restaurants, schools, gyms... you name it!" },
 ];
 
 const Services = () => {
