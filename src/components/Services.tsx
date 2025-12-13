@@ -36,6 +36,8 @@ const Services = () => {
   // State: Form Data
   const [formData, setFormData] = useState<PricingRequest & {
     serviceCategory: string; // purely for Step 1 UI selection
+    selectedDate: Date | undefined;
+    selectedTime: string;
     instructions: { entry: string; parking: string; pets: string; notes: string };
     contact: { firstName: string; lastName: string; email: string; phone: string; address: string };
   }>({
@@ -44,6 +46,8 @@ const Services = () => {
     homeDetails: { bedrooms: 0, bathrooms: 0, kitchens: 0, other: 0 },
     extras: [],
     frequency: "One time",
+    selectedDate: undefined,
+    selectedTime: "08:00 AM - 10:00 AM",
     instructions: { entry: "", parking: "", pets: "", notes: "" },
     contact: { firstName: "", lastName: "", email: "", phone: "", address: "" }
   });
@@ -198,34 +202,82 @@ const Services = () => {
     </div>
   );
 
-  // STEP 3
-  const renderStep3 = () => (
+  const renderStep3 = () => {
+    const today = new Date();
+    const currentMonth = formData.selectedDate ? formData.selectedDate.getMonth() : today.getMonth();
+    const currentYear = formData.selectedDate ? formData.selectedDate.getFullYear() : today.getFullYear();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+    const monthName = new Date(currentYear, currentMonth).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+    const handleDateSelect = (day: number) => {
+      const newDate = new Date(currentYear, currentMonth, day);
+      if (newDate >= today) {
+        setFormData(prev => ({ ...prev, selectedDate: newDate }));
+      }
+    };
+
+    const isDateSelected = (day: number) => {
+      if (!formData.selectedDate) return false;
+      return formData.selectedDate.getDate() === day && 
+             formData.selectedDate.getMonth() === currentMonth &&
+             formData.selectedDate.getFullYear() === currentYear;
+    };
+
+    const isPastDate = (day: number) => {
+      const date = new Date(currentYear, currentMonth, day);
+      const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      return date < todayStart;
+    };
+
+    return (
     <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-right duration-500">
       <div className="grid md:grid-cols-2 gap-8">
-        {/* Mock Calendar */}
+        {/* Calendar */}
         <div className="bg-white border border-gray-100 rounded-3xl p-6 shadow-sm">
           <div className="flex items-center justify-between mb-6">
             <span className="font-bold text-lg">Select Date</span>
-            <span className="text-sm text-gray-500">December 2025</span>
+            <span className="text-sm text-gray-500">{monthName}</span>
           </div>
           <div className="grid grid-cols-7 gap-2 text-center text-sm mb-2 text-gray-400">
-            {['S','M','T','W','T','F','S'].map(d => <div key={d}>{d}</div>)}
+            {['S','M','T','W','T','F','S'].map((d, i) => <div key={`${d}-${i}`}>{d}</div>)}
           </div>
           <div className="grid grid-cols-7 gap-2">
-            {Array.from({length: 31}).map((_, i) => (
-              <button 
-                key={i} 
-                className={`h-8 w-8 rounded-full flex items-center justify-center text-sm transition-all
-                  ${i === 14 ? "bg-primary text-white shadow-md" : "hover:bg-gray-100 text-gray-600"}
-                `}
-              >
-                {i + 1}
-              </button>
+            {/* Empty cells for days before the first of the month */}
+            {Array.from({length: firstDayOfMonth}).map((_, i) => (
+              <div key={`empty-${i}`} className="h-8 w-8" />
             ))}
+            {Array.from({length: daysInMonth}).map((_, i) => {
+              const day = i + 1;
+              const past = isPastDate(day);
+              const selected = isDateSelected(day);
+              return (
+                <button 
+                  key={day}
+                  onClick={() => !past && handleDateSelect(day)}
+                  disabled={past}
+                  className={`h-8 w-8 rounded-full flex items-center justify-center text-sm transition-all
+                    ${selected ? "bg-primary text-white shadow-md" : ""}
+                    ${past ? "text-gray-300 cursor-not-allowed" : "hover:bg-gray-100 text-gray-600"}
+                  `}
+                >
+                  {day}
+                </button>
+              );
+            })}
           </div>
+          {formData.selectedDate && (
+            <div className="mt-4 text-sm text-primary font-medium">
+              Selected: {formData.selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
+            </div>
+          )}
           <div className="mt-6">
             <label className="block text-sm font-medium text-gray-700 mb-2">Time Preference</label>
-            <select className="w-full p-3 bg-gray-50 rounded-xl border-none text-gray-600 outline-none">
+            <select 
+              className="w-full p-3 bg-gray-50 rounded-xl border-none text-gray-600 outline-none"
+              value={formData.selectedTime}
+              onChange={(e) => setFormData(prev => ({ ...prev, selectedTime: e.target.value }))}
+            >
               <option>08:00 AM - 10:00 AM</option>
               <option>10:00 AM - 12:00 PM</option>
               <option>12:00 PM - 02:00 PM</option>
@@ -264,6 +316,7 @@ const Services = () => {
       </div>
     </div>
   );
+  };
 
   // STEP 4
   const renderStep4 = () => (
