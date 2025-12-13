@@ -12,20 +12,10 @@ const Hero = () => {
   useEffect(() => {
     const handleScroll = () => {
       if (!containerRef.current) return;
-      
       const scrollY = window.scrollY;
-      const windowHeight = window.innerHeight;
-      
-      // Calculate progress based on first 500px of scrolling
-      // You can adjust '500' to make the animation faster or slower
       const progress = Math.min(scrollY / 200, 1);
-
-      // SCALE: Shrink from 1.0 down to 0.9
       const newScale = 1 - (progress * 0.02); 
-      
-      // RADIUS: Go from 0px to 40px
       const newRadius = progress * 40;
-
       setScale(newScale);
       setRadius(newRadius);
     };
@@ -35,13 +25,9 @@ const Hero = () => {
   }, []);
 
   return (
-    // 1. SCROLL TRACK: Taller than screen (150vh) to allow scrolling time for animation
-    <div ref={containerRef} className="relative h-[150vh] bg-white">
-      
-      {/* 2. STICKY WRAPPER: Stays pinned to the viewport while shrinking */}
+    // ADDED: rounded-b-[3rem] for smooth transition to next section
+    <div ref={containerRef} className="relative h-[150vh] bg-white rounded-b-[3rem] z-20">
       <div className="sticky top-0 h-screen overflow-hidden flex items-center justify-center">
-        
-        {/* 3. ANIMATED CARD: The actual hero content that shrinks */}
         <div 
           className="relative w-full h-full overflow-hidden shadow-2xl transition-transform duration-100 ease-linear will-change-transform"
           style={{
@@ -61,23 +47,17 @@ const Hero = () => {
               <source src="/hero.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
-
-            {/* Brighter Overlay (30% opacity) */}
             <div className="absolute inset-0 bg-black/30" />
           </div>
 
           {/* Main Content */}
           <div className="container relative z-10 mx-auto px-6 h-full flex flex-col justify-center pt-20">
             <div className="max-w-4xl mx-auto text-center">
-              
-              {/* Eyebrow */}
               <div className="animate-fade-up opacity-0" style={{ animationDelay: "100ms", animationFillMode: "forwards" }}>
                 <span className="inline-block px-4 py-2 bg-white/10 backdrop-blur-sm text-white text-sm font-medium rounded-full mb-8 border border-white/20 shadow-lg">
                   Professional Cleaning Services
                 </span>
               </div>
-
-              {/* Main headline */}
               <h1 
                 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold leading-tight mb-6 animate-fade-up opacity-0 text-white drop-shadow-md"
                 style={{ animationDelay: "200ms", animationFillMode: "forwards" }}
@@ -86,8 +66,6 @@ const Hero = () => {
                 <span className="text-primary-foreground">One Clean</span>{" "}
                 at a Time
               </h1>
-
-              {/* Subheadline */}
               <p 
                 className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto mb-10 animate-fade-up opacity-0 drop-shadow-sm font-medium"
                 style={{ animationDelay: "300ms", animationFillMode: "forwards" }}
@@ -95,8 +73,6 @@ const Hero = () => {
                 Explore our range of cleaning solutions and experience the difference 
                 of a pristine space today.
               </p>
-
-              {/* CTAs */}
               <div 
                 className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up opacity-0"
                 style={{ animationDelay: "400ms", animationFillMode: "forwards" }}
@@ -113,13 +89,11 @@ const Hero = () => {
                   Learn More
                 </Button>
               </div>
-
-              {/* Trust indicators */}
               <div 
                 className="mt-16 flex flex-wrap items-center justify-center gap-8 text-white/80 animate-fade-up opacity-0"
                 style={{ animationDelay: "500ms", animationFillMode: "forwards" }}
               >
-                <div className="flex items-center gap-2">
+                 <div className="flex items-center gap-2">
                   <div className="flex -space-x-2">
                     {[1, 2, 3, 4].map((i) => (
                       <div
