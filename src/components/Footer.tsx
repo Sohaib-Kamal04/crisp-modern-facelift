@@ -10,7 +10,9 @@ const navLinks = [
 
 const Footer = () => {
   return (
-    <footer className="relative min-h-[420px] overflow-hidden flex items-end">
+    // ADDED: rounded-t-[3rem] gives the footer the curve at the top
+    <footer className="relative min-h-[420px] overflow-hidden flex items-end rounded-t-[3rem]">
+      
       {/* Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -18,12 +20,15 @@ const Footer = () => {
       />
       
       {/* Glassmorphism Container */}
-      <div className="relative z-10 pb-8 pt-6 px-6 w-full">
+      <div className="relative z-10 pb-8 pt-12 px-4 md:px-6 w-full">
         <div className="container mx-auto">
-          <div className="backdrop-blur-md bg-white/15 border border-white/25 rounded-2xl p-6 shadow-xl">
-            <div className="grid md:grid-cols-4 gap-8 mb-6">
+          <div className="backdrop-blur-md bg-white/15 border border-white/25 rounded-3xl p-6 md:p-10 shadow-xl">
+            
+            {/* Grid Layout: Stacked on mobile, 4 columns on desktop */}
+            <div className="grid md:grid-cols-4 gap-8 md:gap-12 mb-8 text-center md:text-left">
+              
               {/* Logo & Description */}
-              <div className="md:col-span-2">
+              <div className="md:col-span-2 flex flex-col items-center md:items-start">
                 <span className="text-3xl font-display font-bold mb-4 block text-foreground">
                   crisp.
                 </span>
@@ -34,8 +39,8 @@ const Footer = () => {
               </div>
 
               {/* Sitemap */}
-              <div>
-                <h4 className="font-semibold mb-4 text-foreground">Sitemap</h4>
+              <div className="flex flex-col items-center md:items-start">
+                <h4 className="font-semibold mb-4 text-foreground text-lg">Sitemap</h4>
                 <nav className="flex flex-col gap-3">
                   {navLinks.map((link) => (
                     <a
@@ -50,12 +55,13 @@ const Footer = () => {
               </div>
 
               {/* Help & Support */}
-              <div>
-                <h4 className="font-semibold mb-4 text-foreground">Help & Support</h4>
-                <div className="space-y-3">
+              <div className="flex flex-col items-center md:items-start">
+                <h4 className="font-semibold mb-4 text-foreground text-lg">Help & Support</h4>
+                <div className="space-y-3 flex flex-col items-center md:items-start w-full">
                   <a
                     href="mailto:crispcleaningmelbourne@outlook.com"
-                    className="text-foreground/70 hover:text-foreground transition-colors block text-sm"
+                    // ADDED: break-all ensures the long email wraps on small screens
+                    className="text-foreground/70 hover:text-foreground transition-colors block text-sm break-all"
                   >
                     crispcleaningmelbourne@outlook.com
                   </a>
@@ -70,7 +76,7 @@ const Footer = () => {
             </div>
 
             {/* Divider */}
-            <div className="border-t border-foreground/20 pt-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="border-t border-foreground/20 pt-6 flex flex-col-reverse md:flex-row justify-between items-center gap-4 text-center md:text-left">
               <p className="text-foreground/60 text-sm">
                 © 2024 Crisp Cleaning. All rights reserved.
               </p>
