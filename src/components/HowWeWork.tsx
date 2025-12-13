@@ -113,7 +113,7 @@ const HowWeWork = () => {
     >
       {/* Background layer with its own transition */}
       <div 
-        className="absolute inset-0 bg-foreground"
+        className="absolute inset-0 bg-foreground rounded-2xl"
         style={{
           opacity: bgOpacity,
           transform: `scale(${sectionScale})`,
