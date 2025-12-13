@@ -26,8 +26,8 @@ const Hero = () => {
 
   return (
     // ADDED: rounded-b-[3rem] for smooth transition to next section
-    <div ref={containerRef} className="relative h-[150vh] z-20">
-      <div className="sticky top-0 h-screen overflow-hidden flex items-center justify-center">
+    <div ref={containerRef} className="relative h-[150vh] z-20 bg-transparent">
+      <div className="sticky top-0 h-screen overflow-hidden flex items-center justify-center bg-transparent">
         <div 
           className="relative w-full h-full overflow-hidden shadow-2xl transition-transform duration-100 ease-linear will-change-transform"
           style={{

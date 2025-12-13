@@ -106,7 +106,7 @@ const Reviews = () => {
                     md:[transform:rotate(var(--desktop-rotation))]
                     md:hover:![transform:rotate(0deg)_translateY(-20px)]
                   `}
-                  style={{ '--desktop-rotation': `${rotation}deg` }}
+                  style={{ '--desktop-rotation': `${rotation}deg` } as React.CSSProperties}
                 >
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-semibold text-sm shrink-0">
