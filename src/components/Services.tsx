@@ -21,7 +21,7 @@ const Services = () => {
   const totalSteps = 4;
 
   return (
-    <section id="services" className="py-24 bg-secondary/30 relative overflow-hidden">
+    <section id="services" className="py-24 relative overflow-hidden">
       
       {/* --- OUTSIDE BUBBLES (Behind the main white card) --- */}
       <div className="absolute top-1/4 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -translate-x-1/2" />
