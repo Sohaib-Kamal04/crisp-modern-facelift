@@ -10,12 +10,11 @@ const navLinks = [
 
 const Footer = () => {
   return (
-    // ADDED: rounded-t-[3rem] gives the footer the curve at the top
-    <footer className="relative min-h-[420px] overflow-hidden flex items-end rounded-t-[3rem]">
+    <footer className="relative min-h-[520px] md:min-h-[480px] overflow-hidden flex items-end rounded-t-[3rem]">
       
-      {/* Background Image */}
+      {/* Background Image - positioned to show more of the wavy design */}
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 bg-cover bg-top bg-no-repeat"
         style={{ backgroundImage: `url(${footerBg})` }}
       />
       
@@ -60,8 +59,7 @@ const Footer = () => {
                 <div className="space-y-3 flex flex-col items-center md:items-start w-full">
                   <a
                     href="mailto:crispcleaningmelbourne@outlook.com"
-                    // ADDED: break-all ensures the long email wraps on small screens
-                    className="text-foreground/70 hover:text-foreground transition-colors block text-sm break-all"
+                    className="text-foreground/70 hover:text-foreground transition-colors block text-sm whitespace-nowrap overflow-hidden text-ellipsis max-w-full"
                   >
                     crispcleaningmelbourne@outlook.com
                   </a>
