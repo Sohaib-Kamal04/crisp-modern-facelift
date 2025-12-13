@@ -20,7 +20,7 @@ const About = () => {
           // Start animation when element is visible
           let start = 0;
           const end = totalYears;
-          const duration = 2000; // 2 seconds animation
+          const duration = 1300; // 2 seconds animation
           const incrementTime = Math.abs(Math.floor(duration / end));
 
           const timer = setInterval(() => {
