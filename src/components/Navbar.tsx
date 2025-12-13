@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
@@ -14,14 +16,19 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Define the point where the animation ends (matches the logic in Hero.jsx)
+  const ANIMATION_END_POINT = 300;
+
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      // The Navbar stays transparent until the Hero rounding is complete (at 500px)
+      setIsScrolled(window.scrollY > ANIMATION_END_POINT);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Text Color Logic
   const textColorClass = isScrolled ? "text-foreground/70" : "text-white/90";
   const hoverColorClass = "hover:text-primary";
 
@@ -29,11 +36,13 @@ const Navbar = () => {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled
-          ? "bg-card/90 backdrop-blur-lg shadow-sm py-3"
-          : "bg-transparent py-6"
+          ? "bg-card/90 backdrop-blur-lg shadow-sm py-3" // Scrolled State (White/Glass)
+          : "bg-transparent py-6" // Top State (Transparent)
       }`}
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
+        
+        {/* LOGO */}
         <a href="#" className="flex items-center gap-2">
           <img 
             src="/logo.png" 
