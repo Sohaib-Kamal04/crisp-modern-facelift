@@ -31,7 +31,7 @@ export const useScrollScale = (options: UseScrollScaleOptions = {}) => {
   const style: React.CSSProperties = {
     transform: isVisible ? `scale(${finalScale})` : `scale(${initialScale})`,
     opacity: isVisible ? 1 : 0,
-    transition: "transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
+    transition: "transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s cubic-bezier(0.16, 1, 0.3, 1)",
   };
 
   return { ref, style, isVisible };
