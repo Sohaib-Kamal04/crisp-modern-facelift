@@ -64,11 +64,9 @@ const HowWeWork = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [pathLength, isDesktop]);
 
-  // UPDATED PATH: "Ohm/Wave" Style
-  // 1. Start: x=150, y=350 (Under Card 1)
-  // 2. Curve to: x=500, y=80  (Top of Card 2)
-  // 3. Curve to: x=850, y=650 (Bottom of Card 3)
-  const wavePath = "M 150 350 C 300 350, 350 80, 500 80 C 650 80, 700 650, 850 650";
+  // UPDATED PATH: Large "S" Shape matching the image
+  // Starts bottom-left, curves around top-left card, down around bottom-center card, and up around top-right card.
+  const wavePath = "M 50 600 C 150 600, 150 150, 350 150 C 550 150, 550 600, 750 600 C 950 600, 950 150, 1050 150";
 
   return (
     <section 
@@ -79,7 +77,7 @@ const HowWeWork = () => {
     >
       <div className={`
         w-full px-6 py-20
-        /* STICKY CONTAINER: Reduced to 90vh (90% viewport) as requested */
+        /* STICKY CONTAINER: Reduced to 90vh (90% viewport) */
         md:sticky md:top-0 md:h-[90vh] md:max-h-[90vh] md:flex md:flex-col md:items-center md:pt-28 md:pb-8 md:overflow-hidden
       `}>
         
@@ -90,12 +88,12 @@ const HowWeWork = () => {
         {/* VISUALIZATION AREA */}
         <div className="relative w-full max-w-6xl mx-auto md:flex-1 md:min-h-0 md:flex md:items-center md:justify-center">
           
-          <div className="md:relative md:w-full md:aspect-[1000/700] md:max-h-full">
+          <div className="md:relative md:w-full md:aspect-[1100/700] md:max-h-full">
             
             {/* SVG Line */}
             <svg
               className="hidden md:block absolute inset-0 w-full h-full pointer-events-none"
-              viewBox="0 0 1000 700"
+              viewBox="0 0 1100 700"
               fill="none"
               preserveAspectRatio="xMidYMid meet"
             >
@@ -126,14 +124,14 @@ const HowWeWork = () => {
                 const thresholds = [0.1, 0.5, 0.9];
                 const isActive = isDesktop ? progress >= thresholds[index] : true;
                 
-                // NEW POSITIONS to match the "Wave" path
+                // NEW POSITIONS to match the "S" path: Top - Bottom - Top
                 const desktopPositions = [
-                  // Card 1: Top Left (Line starts UNDER it)
-                  { left: "2%", top: "10%" }, 
-                  // Card 2: Top Center (Line hits TOP of it)
-                  { left: "50%", top: "12%", x: "-50%" }, 
-                  // Card 3: Bottom Right (Line hits BOTTOM of it)
-                  { left: "auto", right: "2%", bottom: "10%" }, 
+                  // Card 1: Top Left
+                  { left: "5%", top: "10%" }, 
+                  // Card 2: Bottom Center
+                  { left: "50%", bottom: "10%", x: "-50%" }, 
+                  // Card 3: Top Right
+                  { left: "auto", right: "5%", top: "10%" }, 
                 ];
 
                 const pos = desktopPositions[index];
@@ -162,7 +160,7 @@ const HowWeWork = () => {
 
                     <div className="bg-background/5 backdrop-blur-sm p-5 rounded-xl border border-white/10 relative z-10">
                       <span className="inline-block text-primary text-xs font-bold mb-2 px-2 py-1 bg-primary/10 rounded">
-                        STEP {step.number}
+                        [ STEP {step.number} ]
                       </span>
                       <h3 className="text-lg md:text-xl font-display font-bold mb-2 text-background">
                         {step.title}
