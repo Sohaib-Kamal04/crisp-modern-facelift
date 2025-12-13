@@ -23,10 +23,10 @@ const Footer = () => {
         <div className="container mx-auto">
           <div className="backdrop-blur-md bg-white/15 border border-white/25 rounded-3xl p-6 md:p-10 shadow-xl">
             
-            {/* UPDATED GRID: changed to grid-cols-6 for better spacing control */}
-            <div className="grid md:grid-cols-6 gap-4 text-center md:text-left">
+            {/* Grid Layout */}
+            <div className="grid md:grid-cols-7 gap-8 text-center md:text-left">
               
-              {/* Logo & Description - Takes 3 cols (50%) */}
+              {/* Logo & Description */}
               <div className="md:col-span-3 flex flex-col items-center md:items-start">
                 <span className="text-3xl font-display font-bold mb-4 block text-foreground">
                   crisp.
@@ -37,7 +37,7 @@ const Footer = () => {
                 </p>
               </div>
 
-              {/* Sitemap - Takes 1 col (~16%) - Narrower */}
+              {/* Sitemap */}
               <div className="md:col-span-1 flex flex-col items-center md:items-start">
                 <h4 className="font-semibold mb-4 text-foreground text-lg">Sitemap</h4>
                 <nav className="flex flex-col gap-3">
@@ -53,16 +53,22 @@ const Footer = () => {
                 </nav>
               </div>
 
-              {/* Help & Support - Takes 2 cols (~33%) - Wider for email */}
-              <div className="md:col-span-2 flex flex-col items-center md:items-start">
+              {/* Help & Support */}
+              <div className="md:col-span-3 flex flex-col items-center md:items-start">
                 <h4 className="font-semibold mb-4 text-foreground text-lg">Help & Support</h4>
                 <div className="space-y-3 flex flex-col items-center md:items-start w-full">
+                  
+                  {/* --- FIX IS HERE --- */}
                   <a
                     href="mailto:crispcleaningmelbourne@outlook.com"
-                    className="text-foreground/70 hover:text-foreground transition-colors block text-sm whitespace-nowrap overflow-hidden text-ellipsis max-w-full"
+                    // Changed: Removed 'whitespace-nowrap overflow-hidden text-ellipsis'
+                    // Added: 'break-all' (forces long words to wrap on mobile)
+                    className="text-foreground/70 hover:text-foreground transition-colors block text-sm break-all"
                   >
                     crispcleaningmelbourne@outlook.com
                   </a>
+                  {/* ------------------- */}
+
                   <a
                     href="#contact"
                     className="text-foreground/70 hover:text-foreground transition-colors block"
