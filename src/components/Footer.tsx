@@ -10,7 +10,7 @@ const navLinks = [
 
 const Footer = () => {
   return (
-    <footer className="relative min-h-[520px] md:min-h-[480px] overflow-hidden flex items-end rounded-t-[3rem]">
+    <footer className="relative min-h-[480px] md:min-h-[420px] overflow-hidden flex items-end rounded-t-[3rem]">
       
       {/* Background Image - positioned to show more of the wavy design */}
       <div 
@@ -19,12 +19,12 @@ const Footer = () => {
       />
       
       {/* Glassmorphism Container */}
-      <div className="relative z-10 pb-8 pt-12 px-4 md:px-6 w-full">
+      <div className="relative z-10 pb-6 pt-8 px-4 md:px-6 w-full">
         <div className="container mx-auto">
-          <div className="backdrop-blur-md bg-white/15 border border-white/25 rounded-3xl p-6 md:p-10 shadow-xl">
+          <div className="backdrop-blur-md bg-white/15 border border-white/25 rounded-2xl p-5 md:p-8 shadow-xl">
             
             {/* Grid Layout: Stacked on mobile, 4 columns on desktop */}
-            <div className="grid md:grid-cols-4 gap-8 md:gap-12 mb-8 text-center md:text-left">
+            <div className="grid md:grid-cols-4 gap-6 md:gap-10 mb-6 text-center md:text-left">
               
               {/* Logo & Description */}
               <div className="md:col-span-2 flex flex-col items-center md:items-start">
