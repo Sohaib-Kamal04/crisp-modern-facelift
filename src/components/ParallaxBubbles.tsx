@@ -84,7 +84,7 @@ const ParallaxBubbles = () => {
             top: `${bubble.top}vh`,
             opacity: bubble.opacity,
             // REDUCED BLUR: 40px is soft but visible. 80px was too faint.
-            filter: bubble.isLarge ? 'blur(40px)' : 'blur(1px)',
+            filter: bubble.isLarge ? 'blur(10px)' : 'blur(1px)',
             transform: `translate3d(0, ${-scrollY * bubble.speed}px, 0)`,
           }}
         />
