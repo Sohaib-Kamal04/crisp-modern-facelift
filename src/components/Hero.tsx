@@ -13,8 +13,10 @@ const Hero = () => {
     const handleScroll = () => {
       if (!containerRef.current) return;
       const scrollY = window.scrollY;
+      // Increased scale factor to 0.1 for a more visible effect (goes to 0.9)
+      // You can change 0.1 back to 0.02 if you want it very subtle
       const progress = Math.min(scrollY / 200, 1);
-      const newScale = 1 - (progress * 0.02); 
+      const newScale = 1 - (progress * 0.1); 
       const newRadius = progress * 40;
       setScale(newScale);
       setRadius(newRadius);
@@ -25,16 +27,19 @@ const Hero = () => {
   }, []);
 
   return (
-    // ADDED: rounded-b-[3rem] for smooth transition to next section
     <div ref={containerRef} className="relative h-[150vh] z-20 bg-transparent">
-      <div className="sticky top-0 h-screen overflow-hidden flex items-center justify-center bg-transparent">
-        <div 
-          className="relative w-full h-full overflow-hidden shadow-2xl transition-transform duration-100 ease-linear will-change-transform"
-          style={{
+      {/* MOVED STYLES HERE: 
+         The 'sticky' container now handles the scaling and border-radius.
+         This ensures the "Parent" scales effectively.
+      */}
+      <div 
+        className="sticky top-0 h-screen overflow-hidden flex items-center justify-center bg-transparent transition-transform duration-100 ease-linear will-change-transform"
+        style={{
             transform: `scale(${scale})`,
             borderRadius: `${radius}px`,
-          }}
-        >
+        }}
+      >
+        <div className="relative w-full h-full overflow-hidden shadow-2xl">
           {/* VIDEO BACKGROUND */}
           <div className="absolute inset-0 z-0">
             <video
@@ -82,7 +87,6 @@ const Hero = () => {
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
                 
-                {/* --- UPDATED LEARN MORE BUTTON --- */}
                 <Button 
                   variant="hero-outline" 
                   size="xl" 
@@ -90,7 +94,6 @@ const Hero = () => {
                 >
                   Learn More
                 </Button>
-                {/* --------------------------------- */}
                 
               </div>
               <div 
