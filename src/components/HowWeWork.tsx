@@ -124,7 +124,7 @@ const HowWeWork = () => {
       
       <div 
         className={`
-          relative w-full px-6 py-20 text-background
+          relative w-full px-6 py-20 text-background rounded-[3rem]
           md:sticky md:top-0 md:h-[90vh] md:max-h-[90vh] md:flex md:flex-col md:items-center md:pt-28 md:pb-8 md:overflow-hidden
         `}
         style={{
