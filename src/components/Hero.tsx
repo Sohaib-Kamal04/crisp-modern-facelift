@@ -13,10 +13,8 @@ const Hero = () => {
     const handleScroll = () => {
       if (!containerRef.current) return;
       const scrollY = window.scrollY;
-      // Increased scale factor to 0.1 for a more visible effect (goes to 0.9)
-      // You can change 0.1 back to 0.02 if you want it very subtle
       const progress = Math.min(scrollY / 200, 1);
-      const newScale = 1 - (progress * 0.1); 
+      const newScale = 1 - (progress * 0.02); 
       const newRadius = progress * 40;
       setScale(newScale);
       setRadius(newRadius);
