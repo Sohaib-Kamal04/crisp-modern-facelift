@@ -23,59 +23,56 @@ const Footer = () => {
         <div className="container mx-auto">
           <div className="backdrop-blur-md bg-white/15 border border-white/25 rounded-3xl p-6 md:p-10 shadow-xl">
             
-            {/* Grid Layout */}
-            <div className="grid md:grid-cols-7 gap-8 text-center md:text-left">
+            {/* UPDATED GRID: grid-cols-7 */}
+            <div className="grid md:grid-cols-7 gap-4 text-center md:text-left">
               
-              {/* Logo & Description */}
+              {/* 1. Logo (Span 3) */}
               <div className="md:col-span-3 flex flex-col items-center md:items-start">
                 <span className="text-3xl font-display font-bold mb-4 block text-foreground">
                   crisp.
                 </span>
                 <p className="text-foreground/80 max-w-md leading-relaxed">
                   Transforming spaces, one clean at a time. We're committed to 
-                  delivering exceptional cleaning services that exceed your expectations.
+                  delivering exceptional cleaning services.
                 </p>
               </div>
 
-              {/* Sitemap */}
+              {/* 2. Sitemap (Span 1) - Centered or Left */}
               <div className="md:col-span-1 flex flex-col items-center md:items-start">
                 <h4 className="font-semibold mb-4 text-foreground text-lg">Sitemap</h4>
                 <nav className="flex flex-col gap-3">
                   {navLinks.map((link) => (
-                    <a
-                      key={link.name}
-                      href={link.href}
-                      className="text-foreground/70 hover:text-foreground transition-colors"
-                    >
+                    <a key={link.name} href={link.href} className="text-foreground/70 hover:text-foreground transition-colors">
                       {link.name}
                     </a>
                   ))}
                 </nav>
               </div>
 
-              {/* Help & Support */}
-              <div className="md:col-span-3 flex flex-col items-center md:items-start">
-                <h4 className="font-semibold mb-4 text-foreground text-lg">Help & Support</h4>
-                <div className="space-y-3 flex flex-col items-center md:items-start w-full">
-                  
-                  {/* --- FIX IS HERE --- */}
-                  <a
-                    href="mailto:crispcleaningmelbourne@outlook.com"
-                    // Changed: Removed 'whitespace-nowrap overflow-hidden text-ellipsis'
-                    // Added: 'break-all' (forces long words to wrap on mobile)
-                    className="text-foreground/70 hover:text-foreground transition-colors block text-sm break-all"
-                  >
-                    crispcleaningmelbourne@outlook.com
-                  </a>
-                  {/* ------------------- */}
-
-                  <a
-                    href="#contact"
-                    className="text-foreground/70 hover:text-foreground transition-colors block"
-                  >
-                    Contact Us
-                  </a>
+              {/* 3. Help & Support (Span 3) - ALIGN RIGHT, TEXT LEFT */}
+              {/* 'items-center md:items-end' pushes the whole block to the right */}
+              <div className="md:col-span-3 flex flex-col items-center md:items-end">
+                
+                {/* INNER WRAPPER: This holds the content together */}
+                {/* 'items-center md:items-start' ensures the text inside aligns left */}
+                <div className="flex flex-col items-center md:items-start">
+                  <h4 className="font-semibold mb-4 text-foreground text-lg">Help & Support</h4>
+                  <div className="space-y-3 flex flex-col items-center md:items-start">
+                    <a
+                      href="mailto:crispcleaningmelbourne@outlook.com"
+                      className="text-foreground/70 hover:text-foreground transition-colors block text-sm break-all"
+                    >
+                      crispcleaningmelbourne@outlook.com
+                    </a>
+                    <a
+                      href="#contact"
+                      className="text-foreground/70 hover:text-foreground transition-colors block"
+                    >
+                      Contact Us
+                    </a>
+                  </div>
                 </div>
+
               </div>
             </div>
 
@@ -84,10 +81,7 @@ const Footer = () => {
               <p className="text-foreground/60 text-sm">
                 © 2024 Crisp Cleaning. All rights reserved.
               </p>
-              <a
-                href="#"
-                className="text-foreground/60 hover:text-foreground/80 text-sm transition-colors"
-              >
+              <a href="#" className="text-foreground/60 hover:text-foreground/80 text-sm transition-colors">
                 Terms & Conditions
               </a>
             </div>
