@@ -12,7 +12,7 @@ const Footer = () => {
   return (
     <footer className="relative min-h-[520px] md:min-h-[480px] overflow-hidden flex items-end rounded-t-[3rem]">
       
-      {/* Background Image - positioned to show more of the wavy design */}
+      {/* Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-top bg-no-repeat"
         style={{ backgroundImage: `url(${footerBg})` }}
@@ -23,11 +23,11 @@ const Footer = () => {
         <div className="container mx-auto">
           <div className="backdrop-blur-md bg-white/15 border border-white/25 rounded-3xl p-6 md:p-10 shadow-xl">
             
-            {/* Grid Layout: Stacked on mobile, 4 columns on desktop */}
-            <div className="grid md:grid-cols-4 gap-0 md:gap-0 text-center md:text-left">
+            {/* UPDATED GRID: changed to grid-cols-6 for better spacing control */}
+            <div className="grid md:grid-cols-6 gap-2 text-center md:text-left">
               
-              {/* Logo & Description */}
-              <div className="md:col-span-2 flex flex-col items-center md:items-start">
+              {/* Logo & Description - Takes 3 cols (50%) */}
+              <div className="md:col-span-3 flex flex-col items-center md:items-start">
                 <span className="text-3xl font-display font-bold mb-4 block text-foreground">
                   crisp.
                 </span>
@@ -37,8 +37,8 @@ const Footer = () => {
                 </p>
               </div>
 
-              {/* Sitemap */}
-              <div className="flex flex-col items-center md:items-start">
+              {/* Sitemap - Takes 1 col (~16%) - Narrower */}
+              <div className="md:col-span-1 flex flex-col items-center md:items-start">
                 <h4 className="font-semibold mb-4 text-foreground text-lg">Sitemap</h4>
                 <nav className="flex flex-col gap-3">
                   {navLinks.map((link) => (
@@ -53,8 +53,8 @@ const Footer = () => {
                 </nav>
               </div>
 
-              {/* Help & Support */}
-              <div className="flex flex-col items-center md:items-start">
+              {/* Help & Support - Takes 2 cols (~33%) - Wider for email */}
+              <div className="md:col-span-2 flex flex-col items-center md:items-start">
                 <h4 className="font-semibold mb-4 text-foreground text-lg">Help & Support</h4>
                 <div className="space-y-3 flex flex-col items-center md:items-start w-full">
                   <a
@@ -74,7 +74,7 @@ const Footer = () => {
             </div>
 
             {/* Divider */}
-            <div className="border-t border-foreground/20 pt-6 flex flex-col-reverse md:flex-row justify-between items-center gap-4 text-center md:text-left">
+            <div className="border-t border-foreground/20 pt-6 mt-10 flex flex-col-reverse md:flex-row justify-between items-center gap-4 text-center md:text-left">
               <p className="text-foreground/60 text-sm">
                 © 2024 Crisp Cleaning. All rights reserved.
               </p>
