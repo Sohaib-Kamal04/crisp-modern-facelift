@@ -97,7 +97,8 @@ const HowWeWork = () => {
 
   // Calculate dynamic styles for smooth transitions
   const sectionScale = sectionVisible ? 1 : 0.5;
-  const sectionOpacity = sectionVisible ? (1 - exitProgress * 0.3) : 0;
+  const sectionOpacity = sectionVisible ? 1 : 0;
+  const bgOpacity = sectionVisible ? (1 - exitProgress * 0.3) : 0;
 
   // UPDATED PATH: The "Red Line" Arch / Ohm Symbol
   const redLinePath = "M 50 600 C 250 600, 350 100, 500 100 S 750 600, 950 600";
@@ -105,18 +106,31 @@ const HowWeWork = () => {
   return (
     <section 
       ref={containerRef} 
-      className="relative bg-foreground text-background"
-      style={{ height: isDesktop ? "180vh" : "auto" }}
+      className="relative"
+      style={{ 
+        height: isDesktop ? "180vh" : "auto",
+      }}
     >
+      {/* Background layer with its own transition */}
+      <div 
+        className="absolute inset-0 bg-foreground"
+        style={{
+          opacity: bgOpacity,
+          transform: `scale(${sectionScale})`,
+          borderRadius: sectionVisible ? "0" : "2rem",
+          transition: "opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), border-radius 1.2s cubic-bezier(0.16, 1, 0.3, 1)",
+        }}
+      />
+      
       <div 
         className={`
-          w-full px-6 py-20
+          relative w-full px-6 py-20 text-background
           md:sticky md:top-0 md:h-[90vh] md:max-h-[90vh] md:flex md:flex-col md:items-center md:pt-28 md:pb-8 md:overflow-hidden
         `}
         style={{
           transform: `scale(${sectionScale})`,
           opacity: sectionOpacity,
-          transition: "transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
+          transition: "transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s cubic-bezier(0.16, 1, 0.3, 1)",
         }}
       >
         
