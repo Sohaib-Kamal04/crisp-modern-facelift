@@ -1,4 +1,7 @@
+"use client";
+
 import { Star } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
 
 const testimonials = [
   {
@@ -34,8 +37,33 @@ const testimonials = [
 ];
 
 const Reviews = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect(); // Only animate once
+        }
+      },
+      { threshold: 0.2 } // Trigger when 20% of section is visible
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="reviews" className="py-24 bg-primary/10 overflow-hidden">
+    <section 
+      id="reviews" 
+      ref={sectionRef} 
+      className="py-24 bg-primary/10 overflow-hidden"
+    >
       <div className="container mx-auto px-6">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -65,60 +93,78 @@ const Reviews = () => {
             const rotation = getRotation();
 
             return (
+              // WRAPPER DIV: Handles Layout (Margins) + Entrance Animation
               <div
                 key={index}
                 className={`
-                  relative 
-                  w-full max-w-sm md:w-64 
-                  bg-background rounded-2xl p-6 shadow-lg 
-                  cursor-pointer transition-all duration-500 ease-out
-                  
-                  /* Mobile: No rotation, Normal margin */
-                  transform-none mb-0
-
-                  /* Desktop: Apply Rotation var, Negative Margin for overlap */
-                  md:[transform:rotate(var(--desktop-rotation))]
+                  /* Base Layout Sizing (Moved from inner card) */
+                  w-full max-w-sm md:w-64
+                  /* Negative Margins for Desktop Fan Layout */
                   md:ml-[-40px] md:first:ml-0
-                  
-                  /* Desktop Hover State: Reset rotation, lift up, and FORCE Z-INDEX */
-                  md:hover:![transform:rotate(0deg)_translateY(-20px)]
+
+                  /* ENTRANCE ANIMATION CLASSES */
+                  transition-all duration-700 ease-out
+                  ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-32'}
+
+                  /* Desktop Hover State for Z-Index */
                   md:hover:!z-50
                 `}
-                // Inline styles for base stacking order and rotation variable
                 style={{
-                    zIndex: index + 1,
-                    '--desktop-rotation': `${rotation}deg`
+                  zIndex: index + 1,
+                  transitionDelay: `${index * 150}ms` // Staggered animation (fast)
                 }}
               >
-                {/* Avatar and Info */}
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-semibold text-sm shrink-0">
-                    {testimonial.avatar}
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-foreground leading-tight">
-                      {testimonial.name}
-                    </h4>
-                    <p className="text-xs text-muted-foreground">
-                      {testimonial.role}
-                    </p>
-                  </div>
-                </div>
+                {/* INNER CARD: Handles Visuals, Rotation, and Hover Lift */}
+                <div
+                  className={`
+                    relative 
+                    bg-background rounded-2xl p-6 shadow-lg 
+                    cursor-pointer transition-all duration-500 ease-out
+                    
+                    /* Mobile: No rotation */
+                    transform-none mb-0
 
-                {/* Stars */}
-                <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="w-4 h-4 fill-primary text-primary"
-                    />
-                  ))}
-                </div>
+                    /* Desktop: Apply Rotation var */
+                    md:[transform:rotate(var(--desktop-rotation))]
+                    
+                    /* Desktop Hover State: Reset rotation, lift up */
+                    md:hover:![transform:rotate(0deg)_translateY(-20px)]
+                  `}
+                  // Rotation variable for the inner card
+                  style={{
+                    '--desktop-rotation': `${rotation}deg`
+                  }}
+                >
+                  {/* Avatar and Info */}
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-semibold text-sm shrink-0">
+                      {testimonial.avatar}
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-foreground leading-tight">
+                        {testimonial.name}
+                      </h4>
+                      <p className="text-xs text-muted-foreground">
+                        {testimonial.role}
+                      </p>
+                    </div>
+                  </div>
 
-                {/* Content */}
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  "{testimonial.content}"
-                </p>
+                  {/* Stars */}
+                  <div className="flex gap-1 mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className="w-4 h-4 fill-primary text-primary"
+                      />
+                    ))}
+                  </div>
+
+                  {/* Content */}
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    "{testimonial.content}"
+                  </p>
+                </div>
               </div>
             );
           })}
