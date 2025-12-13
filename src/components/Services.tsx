@@ -9,7 +9,8 @@ import { useState, useEffect } from "react";
 // --- IMPORTS FROM UTILS ---
 import { 
   calculatePricing, 
-  CLEANING_TYPE_PRICES, 
+  CLEANING_TYPE_PRICES,
+  HOME_DETAIL_PRICES,
   EXTRA_PRICES, 
   FREQUENCY_DISCOUNTS, 
   type PricingRequest, 
@@ -17,7 +18,7 @@ import {
   type CleaningType,
   type Extra,
   type Frequency
-} from "@/utils/pricing"; // Adjust path as needed
+} from "@/utils/pricing";
 
 import { getCurrentAddress } from "@/utils/geolocation"; // Adjust path as needed
 
