@@ -10,8 +10,9 @@ const navLinks = [
 
 const Footer = () => {
   return (
-    // ADDED: rounded-t-[3rem] gives the footer the curve at the top
-    <footer className="relative min-h-[420px] overflow-hidden flex items-end rounded-t-[3rem]">
+    <footer className="relative min-h-[420px] overflow-hidden flex items-end">
+      {/* Top gradient overlay for smooth transition */}
+      <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-secondary/40 to-transparent z-20 pointer-events-none" />
       
       {/* Background Image */}
       <div 

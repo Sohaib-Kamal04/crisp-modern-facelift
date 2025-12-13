@@ -44,7 +44,9 @@ const About = () => {
   }, [totalYears]);
 
   return (
-    <section id="about" className="py-24 bg-secondary/30">
+    <section id="about" className="py-24 bg-gradient-to-b from-secondary/30 via-secondary/20 to-foreground relative overflow-hidden">
+      {/* Transition overlay to dark section */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-foreground to-transparent pointer-events-none z-10" />
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Content */}

@@ -73,9 +73,13 @@ const HowWeWork = () => {
   return (
     <section 
       ref={containerRef} 
-      className="relative bg-foreground text-background"
+      className="relative bg-foreground text-background overflow-hidden"
       style={{ height: isDesktop ? "180vh" : "auto" }}
     >
+      {/* Top fade from dark */}
+      <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-foreground to-transparent z-20 pointer-events-none" />
+      {/* Bottom transition to light */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-secondary/80 to-transparent z-20 pointer-events-none" />
       <div className={`
         w-full px-6 py-20
         md:sticky md:top-0 md:h-[90vh] md:max-h-[90vh] md:flex md:flex-col md:items-center md:pt-28 md:pb-8 md:overflow-hidden
