@@ -60,7 +60,7 @@ const Reviews = () => {
     <section 
       id="reviews" 
       ref={sectionRef as React.RefObject<HTMLElement>}
-      className="py-24 overflow-hidden"
+      className="py-24 overflow-hidden rounded-2xl"
       style={scaleStyle}
     >
       <div className="container mx-auto px-6">
