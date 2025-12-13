@@ -47,7 +47,7 @@ const Navbar = () => {
           <img 
             src="/logo.png" 
             alt="Crisp Logo" 
-            className="h-12 w-auto object-contain" 
+            className="h-14 w-auto object-contain" 
           />
         </a>
 
