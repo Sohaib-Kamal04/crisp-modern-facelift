@@ -55,9 +55,8 @@ const Reviews = () => {
   }, []);
 
   return (
-    <section id="reviews" ref={sectionRef} className="pt-32 pb-24 bg-gradient-to-b from-secondary/60 via-secondary/30 to-background relative overflow-hidden">
-      {/* Top gradient overlay for smooth transition from dark section */}
-      <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-secondary/80 to-transparent pointer-events-none z-10" />
+    // Changed bg to secondary/30 for a soft transition
+    <section id="reviews" ref={sectionRef} className="py-24 bg-secondary/30 overflow-hidden">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <span className="inline-block px-4 py-2 bg-primary/20 text-primary text-sm font-medium rounded-full mb-4">
@@ -104,11 +103,10 @@ const Reviews = () => {
                     bg-background rounded-2xl p-6 shadow-lg 
                     cursor-pointer transition-all duration-500 ease-out
                     transform-none mb-0
-                    md:hover:!-translate-y-5
+                    md:[transform:rotate(var(--desktop-rotation))]
+                    md:hover:![transform:rotate(0deg)_translateY(-20px)]
                   `}
-                  style={{ 
-                    transform: `rotate(${isOddCard && typeof window !== 'undefined' && window.innerWidth >= 768 ? rotation : 0}deg)` 
-                  }}
+                  style={{ '--desktop-rotation': `${rotation}deg` }}
                 >
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-semibold text-sm shrink-0">

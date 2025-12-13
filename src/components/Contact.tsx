@@ -5,12 +5,10 @@ import { ArrowRight, Mail, MapPin, Phone } from "lucide-react";
 
 const Contact = () => {
   return (
-    <section id="contact" className="pt-16 pb-24 bg-gradient-to-b from-background via-background to-secondary/40 relative overflow-hidden">
-      {/* Decorative bubbles */}
+    <section id="contact" className="py-24 bg-background relative overflow-hidden">
+      {/* Moved Bubbles to edges */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2" />
       <div className="absolute bottom-0 left-0 w-80 h-80 bg-accent/5 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2" />
-      {/* Bottom transition overlay for footer */}
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-secondary/60 to-transparent pointer-events-none z-10" />
 
       <div className="container mx-auto px-6 relative z-10">
         

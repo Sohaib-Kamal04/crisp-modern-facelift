@@ -18,12 +18,12 @@ const ParallaxBubbles = () => {
 
   // Generate bubbles only once
   if (bubblesRef.current.length === 0) {
-    // INCREASED: Total bubbles to 80 for much better density
-    bubblesRef.current = Array.from({ length: 80 }, (_, i) => {
-      // Keep about 6 "Large" bubbles, rest are small
-      const isLarge = i < 6;
+    // INCREASED: Total bubbles to 40
+    bubblesRef.current = Array.from({ length: 40 }, (_, i) => {
+      // INCREASED: First 5 bubbles are "Large"
+      const isLarge = i < 5;
 
-      // SIZE
+      // SIZE: Large = 200-400px, Small = 10-60px
       const size = isLarge 
         ? Math.random() * 200 + 200 
         : Math.random() * 50 + 10;
@@ -31,10 +31,11 @@ const ParallaxBubbles = () => {
       // LEFT POSITIONing
       let left;
       if (isLarge) {
-        // Large bubbles on edges
+        // Large bubbles stick to the sides but overlap the screen more
+        // Left side (-10% to 5%) OR Right side (85% to 100%)
         left = Math.random() > 0.5 
-          ? Math.random() * 15 - 10 
-          : Math.random() * 15 + 85; 
+          ? Math.random() * 15 - 10  // Left Edge
+          : Math.random() * 15 + 85; // Right Edge
       } else {
         // Small bubbles scattered everywhere (-5% to 105%)
         left = Math.random() * 110 - 5;
@@ -44,17 +45,18 @@ const ParallaxBubbles = () => {
         id: i,
         size,
         left,
-        top: Math.random() * 400, // Spread vertically
+        // Spread vertically across 400vh (adjust if your site is shorter/longer)
+        top: Math.random() * 400, 
         
-        // Speed
+        // Speed: Large moves faster (foreground effect)
         speed: isLarge 
           ? Math.random() * 0.3 + 0.4 
           : Math.random() * 0.1 + 0.05,
           
-        // Opacity: Increased minimum opacity slightly so they don't vanish
+        // Opacity: Made large bubbles slightly more visible
         opacity: isLarge 
-          ? Math.random() * 0.1 + 0.1 
-          : Math.random() * 0.2 + 0.1, // Small bubbles now 0.1 to 0.3 opacity
+          ? Math.random() * 0.1 + 0.1  // 0.10 to 0.20
+          : Math.random() * 0.15 + 0.05, // 0.05 to 0.20
         
         isLarge,
       };
@@ -70,8 +72,7 @@ const ParallaxBubbles = () => {
   }, []);
 
   return (
-    // IMPORTANT: Added 'z-50' back so they float ABOVE your sections
-    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+    <div className="fixed inset-0 pointer-events-none overflow-hidden">
       {bubblesRef.current.map((bubble) => (
         <div
           key={bubble.id}
@@ -82,7 +83,8 @@ const ParallaxBubbles = () => {
             left: `${bubble.left}%`,
             top: `${bubble.top}vh`,
             opacity: bubble.opacity,
-            filter: bubble.isLarge ? 'blur(3px)' : 'blur(1px)',
+            // REDUCED BLUR: 40px is soft but visible. 80px was too faint.
+            filter: bubble.isLarge ? 'blur(10px)' : 'blur(1px)',
             transform: `translate3d(0, ${-scrollY * bubble.speed}px, 0)`,
           }}
         />
