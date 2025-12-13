@@ -1,10 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
+import useScrollScale from "@/hooks/useScrollScale";
 
 const About = () => {
   const [yearsCount, setYearsCount] = useState(0);
   const counterRef = useRef(null);
+  const { ref: sectionRef, style: scaleStyle } = useScrollScale({ threshold: 0.15 });
   
   // CONFIGURATION: Set your start year here
   const startYear = 2015;
@@ -44,7 +46,12 @@ const About = () => {
   }, [totalYears]);
 
   return (
-    <section id="about" className="py-24 ">
+    <section 
+      id="about" 
+      ref={sectionRef as React.RefObject<HTMLElement>}
+      className="py-24"
+      style={scaleStyle}
+    >
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Content */}
