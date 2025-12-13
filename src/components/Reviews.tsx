@@ -56,7 +56,7 @@ const Reviews = () => {
 
   return (
     // Changed bg to secondary/30 for a soft transition
-    <section id="reviews" ref={sectionRef} className="py-24 bg-secondary/30 overflow-hidden">
+    <section id="reviews" ref={sectionRef} className="py-24 overflow-hidden">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <span className="inline-block px-4 py-2 bg-primary/20 text-primary text-sm font-medium rounded-full mb-4">
