@@ -68,7 +68,7 @@ const Navbar = () => {
         left: 0,
       }}
     >
-      <div className="container mx-auto px-6 pr-2 flex items-center justify-between">
+      <div className="container mx-auto px-6 flex items-center justify-between">
         
         {/* LOGO */}
         <a href="#" className="flex items-center gap-2">
@@ -105,7 +105,7 @@ const Navbar = () => {
           >
             Login
           </Button>
-          <Button variant="hero" size="default">
+          <Button variant="hero" size="default" className={`mr-20`}>
             Get Started Now
           </Button>
         </div>
